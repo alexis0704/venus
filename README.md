@@ -249,6 +249,7 @@ GET   /api/v1/orders/{orderId}
 GET   /api/v1/me/orders
 PATCH /api/v1/orders/{orderId}/cancel
 POST  /api/v1/orders/{orderId}/review
+POST  /api/v1/advisor/chat
 ```
 
 Order creation validates provider availability, vehicle ownership, connector compatibility, time range, and slot overlap. Overlapping booking attempts return `409 SLOT_UNAVAILABLE`.
@@ -282,6 +283,91 @@ reviews[].createdAt
 ```
 
 When frontend API integration starts, add a small adapter in the frontend or add harmless alias fields deliberately. No frontend API integration was implemented in this backend task.
+
+## Volzen Advisor
+
+Volzen Advisor is a source-grounded EV charging platform consultant for the Vietnam MVP. It is not a generic chatbot. It should answer short practical questions about Volzen boundaries, charging-site readiness, host onboarding, connector fit, and proxy demand signals.
+
+Advisor endpoint:
+
+```text
+POST /api/v1/advisor/chat
+```
+
+Example request:
+
+```json
+{
+  "message": "Is District 7 promising for a charging location?",
+  "locationContext": {
+    "district": "District 7",
+    "city": "Ho Chi Minh City"
+  }
+}
+```
+
+Example response shape:
+
+```json
+{
+  "answer": "Short grounded answer.",
+  "sourceIds": ["VOLZEN-LOCATION-SIGNALS-001"],
+  "retrievedSources": [],
+  "grounded": true,
+  "needsProfessionalReview": true,
+  "dataAsOf": "2026-06-28",
+  "provider": "openai",
+  "unsupportedReason": null
+}
+```
+
+Advisor rules:
+
+* Unsupported general chat returns `I don't have a verified answer for that yet.`
+* Grounded answers must include `sourceIds`.
+* Legal, electrical, safety, site-readiness, and demand/profitability answers should use `needsProfessionalReview=true` when review is needed.
+* Location signals are proxy estimates only, not verified demand facts.
+* Responses must not expose raw prompts, provider secrets, or hidden retrieved snippets.
+
+Knowledge files live in:
+
+```text
+server/src/main/resources/advisor/knowledge/
+```
+
+Current formats are small curated markdown files with `id`, `sourceId`, `claimType`, `note`, and `Sources` metadata, plus `location-signals.json` for manually curated demo location signals. Every external legal/market claim needs source metadata, and internal assumptions must be labelled `internal/pilot`.
+
+Advisor provider config:
+
+```properties
+app.advisor.provider=openai
+app.advisor.openai.model=gpt-4.1-mini
+app.advisor.openai.vector-store-id=
+app.advisor.timeout-seconds=60
+app.advisor.request-provider-override-enabled=false
+```
+
+OpenAI is the default advisor provider and reuses the server-side OpenAI-compatible setup. The API key is read only from the server environment through `OPENAI_API_KEY` or the configured generic AI key env var.
+
+Ollama can be used for local/demo advisor runs by setting:
+
+```properties
+app.advisor.provider=ollama
+app.ai.provider=ollama
+app.ai.ollama.model=gemma3
+```
+
+Ollama advisor answers use local curated retrieval only. They should not be treated as live web knowledge.
+
+Future frontend integration should add a chat bubble or advisor panel that calls only the backend endpoint. The frontend should send optional location context from the selected provider/site/district, display the short answer and source IDs, show a professional-review caution when `needsProfessionalReview=true`, and show unsupported fallback clearly. It should not show hidden prompts, raw retrieved snippets, provider internals, or call OpenAI directly.
+
+Deferred production improvements:
+
+* managed knowledge ingestion workflow
+* richer source review process
+* hosted vector-store administration
+* analytics for unanswered questions
+* real auth and per-user chat history
 
 ## Deferred MVP Work
 
