@@ -29,29 +29,35 @@ A minimal reusable Spring Boot starter with H2, shared API infrastructure, stati
 ## Project Structure
 
 ```text
-src/main/java/com/app/venus
-├── VenusApplication.java
-├── modules
-│   └── ai
-│       ├── application
-│       ├── infrastructure
-│       └── interfaces
-└── shared
-    ├── auditing
-    ├── exception
-    └── web
+frontend
+├── index.html
+├── app.js
+└── styles.css
 
-src/main/resources
-├── application.properties
-└── static
-    ├── index.html
-    ├── app.js
-    └── styles.css
+server
+├── pom.xml
+├── mvnw
+├── src/main/java/com/app/venus
+│   ├── VenusApplication.java
+│   ├── modules
+│   │   └── ai
+│   │       ├── application
+│   │       ├── infrastructure
+│   │       └── interfaces
+│   └── shared
+│       ├── auditing
+│       ├── exception
+│       └── web
+└── src/main/resources
+    └── application.properties
 ```
+
+The Maven build copies files from `frontend/` into Spring Boot static resources, so the backend still serves the starter UI at `/`.
 
 ## How To Run
 
 ```bash
+cd server
 ./mvnw spring-boot:run
 ```
 
@@ -64,6 +70,7 @@ http://localhost:8080
 If port 8080 is busy:
 
 ```bash
+cd server
 SERVER_PORT=8081 ./mvnw spring-boot:run
 ```
 
@@ -153,6 +160,16 @@ app.ai.openai.model=gpt-4.1-mini
 
 The API key is read from the environment variable named by `app.ai.openai.api-key-env`.
 
+If your key is stored in `server/.env`, load it before running the backend:
+
+```bash
+cd server
+set -a
+source .env
+set +a
+APP_AI_PROVIDER=openai ./mvnw spring-boot:run
+```
+
 ## Current Generic Endpoints
 
 ```text
@@ -165,7 +182,7 @@ All API responses use the shared response wrapper.
 
 ## Building A Product Module
 
-Add new product code under `src/main/java/com/app/venus/modules/<module-name>` and keep the same internal shape:
+Add new product code under `server/src/main/java/com/app/venus/modules/<module-name>` and keep the same internal shape:
 
 ```text
 application/     business services and use cases

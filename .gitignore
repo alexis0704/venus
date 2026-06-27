@@ -1,7 +1,7 @@
-HELP.md
-target/
+server/HELP.md
+server/target/
 .env
-.mvn/wrapper/maven-wrapper.jar
+server/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 

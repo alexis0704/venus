@@ -4,21 +4,40 @@
         {
             "label": "Maven: spring-boot:run",
             "type": "shell",
-            "command": "mvn spring-boot:run",
+            "command": "./mvnw spring-boot:run",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Maven: package server",
+            "type": "shell",
+            "command": "./mvnw -q package -DskipTests",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+            },
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Maven: clean compile",
             "type": "shell",
-            "command": "mvn clean compile",
+            "command": "./mvnw clean compile",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+            },
             "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Maven: test",
             "type": "shell",
-            "command": "mvn test",
+            "command": "./mvnw test",
+            "options": {
+                "cwd": "${workspaceFolder}/server"
+            },
             "group": "test",
             "problemMatcher": []
         }

@@ -3,16 +3,35 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Run App",
+            "name": "Venus Server",
             "request": "launch",
-            "mainClass": "com.app.venus.VenusApplication",
-            "projectName": "venus",
+            "cwd": "${workspaceFolder}/server",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Maven: package server",
+            "jar": "${workspaceFolder}/server/target/venus-0.0.1-SNAPSHOT.jar",
             "env": {
                 "SERVER_PORT": "8080",
-                "LOG_LEVEL": "info",
-                "APP_LOG_LEVEL": "debug",
-                "JPA_DDL_AUTO": "update",
-                "DEVTOOLS_RESTART_ENABLED": "true"
+                "SPRING_APPLICATION_NAME": "venus",
+                "APP_AI_PROVIDER": "ollama",
+                "APP_AI_FALLBACK_TO_MOCK_ON_ERROR": "true"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Venus Server - OpenAI",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/server",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Maven: package server",
+            "jar": "${workspaceFolder}/server/target/venus-0.0.1-SNAPSHOT.jar",
+            "env": {
+                "SERVER_PORT": "8080",
+                "SPRING_APPLICATION_NAME": "venus",
+                "APP_AI_PROVIDER": "openai",
+                "APP_AI_OPENAI_BASE_URL": "https://api.openai.com/v1",
+                "APP_AI_OPENAI_API_KEY_ENV": "OPENAI_API_KEY",
+                "APP_AI_OPENAI_MODEL": "gpt-4.1-mini",
+                "APP_AI_FALLBACK_TO_MOCK_ON_ERROR": "true"
             }
         }
     ]
