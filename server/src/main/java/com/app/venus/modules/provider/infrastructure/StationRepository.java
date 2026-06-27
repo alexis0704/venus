@@ -18,12 +18,21 @@ public interface StationRepository extends JpaRepository<Station, String> {
     @Query("""
             select distinct station
             from Station station
-            left join station.connectorTypes connectorType
             where station.available = true
-              and (:connectorType is null or connectorType = :connectorType)
               and (:maxPricePerHour is null or station.pricePerHour <= :maxPricePerHour)
             """)
     List<Station> findSearchCandidates(
+            @Param("maxPricePerHour") Integer maxPricePerHour);
+
+    @Query("""
+            select distinct station
+            from Station station
+            join station.connectorTypes connectorType
+            where station.available = true
+              and connectorType = :connectorType
+              and (:maxPricePerHour is null or station.pricePerHour <= :maxPricePerHour)
+            """)
+    List<Station> findSearchCandidatesByConnectorType(
             @Param("connectorType") ConnectorType connectorType,
             @Param("maxPricePerHour") Integer maxPricePerHour);
 }

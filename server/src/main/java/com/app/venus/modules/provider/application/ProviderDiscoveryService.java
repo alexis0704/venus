@@ -58,7 +58,11 @@ public class ProviderDiscoveryService {
         int effectiveOffset = offset == null ? 0 : offset;
         ConnectorType connectorType = connectorTypeValue == null ? null : parseConnectorType(connectorTypeValue);
 
-        List<ProviderSummary> matchingProviders = stationRepository.findSearchCandidates(connectorType, maxPricePerHour)
+        List<Station> candidates = connectorType == null
+                ? stationRepository.findSearchCandidates(maxPricePerHour)
+                : stationRepository.findSearchCandidatesByConnectorType(connectorType, maxPricePerHour);
+
+        List<ProviderSummary> matchingProviders = candidates
                 .stream()
                 .map(station -> toSummary(station, distanceKm(lat, lng, station)))
                 .filter(provider -> provider.distanceKm() <= effectiveRadius)

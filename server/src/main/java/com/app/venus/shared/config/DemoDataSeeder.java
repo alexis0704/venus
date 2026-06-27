@@ -61,6 +61,7 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "https://cdn.volzen.vn/avatars/pvd_p3.jpg");
 
         Vehicle vehicle = vehicle("veh_demo_vf8", driver, "VinFast", "VF8", 2024, ConnectorType.CCS, true);
+        Vehicle typeTwoVehicle = vehicle("veh_demo_model3", driver, "Tesla", "Model 3", 2023, ConnectorType.TYPE_2, false);
 
         Station stationOne = station(
                 "pvd_p1",
@@ -128,7 +129,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         order(
                 "ord_demo_reviewable",
                 stationTwo,
-                vehicle,
+                typeTwoVehicle,
                 driver,
                 "2026-06-22T16:00:00+07:00",
                 "2026-06-22T17:00:00+07:00",
@@ -140,7 +141,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         order(
                 "ord_demo_upcoming",
                 stationTwo,
-                vehicle,
+                typeTwoVehicle,
                 driver,
                 "2026-06-29T13:00:00+07:00",
                 "2026-06-29T14:00:00+07:00",
