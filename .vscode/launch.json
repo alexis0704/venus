@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run App",
+            "request": "launch",
+            "mainClass": "com.app.venus.VenusApplication",
+            "projectName": "venus",
+            "env": {
+                "SERVER_PORT": "8080",
+                "LOG_LEVEL": "info",
+                "APP_LOG_LEVEL": "debug",
+                "JPA_DDL_AUTO": "update",
+                "DEVTOOLS_RESTART_ENABLED": "true"
+            }
+        }
+    ]
+}
