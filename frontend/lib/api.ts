@@ -81,7 +81,16 @@ type ApiOrder = {
   };
 };
 
+type ApiAvailability = {
+  date: string;
+  bookedSlots: Array<{
+    startTime: string;
+    endTime: string;
+  }>;
+};
+
 export type DriverOrder = ApiOrder;
+export type BookedSlot = ApiAvailability["bookedSlots"][number];
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_V1}${path}`, {
@@ -125,6 +134,12 @@ export async function searchProviders(location: Coordinates = DEFAULT_LOCATION) 
 export async function getProvider(providerId: string) {
   const data = await request<ApiProviderDetail>(`/providers/${providerId}`);
   return mapProviderDetail(data);
+}
+
+export async function getProviderAvailability(providerId: string, date: string) {
+  const params = new URLSearchParams({ date });
+  const data = await request<ApiAvailability>(`/providers/${providerId}/availability?${params}`);
+  return data.bookedSlots;
 }
 
 export async function listVehicles() {

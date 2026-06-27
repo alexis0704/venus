@@ -4,7 +4,8 @@ import { useEffect, useState, useMemo } from "react";
 import { VN_DONG_FORMAT } from "@/lib/domain";
 import type { Provider, Vehicle } from "@/lib/domain";
 import { ArrowLeft, Star, MapPin, Car, Clock, Zap } from "lucide-react";
-import { createOrder, getProvider, listVehicles } from "@/lib/api";
+import { createOrder, getProvider, getProviderAvailability, listVehicles } from "@/lib/api";
+import type { BookedSlot } from "@/lib/api";
 
 const SERVICE_FEE_RATE = 0.1;
 
@@ -20,6 +21,7 @@ export default function OrderPage() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [providerLoading, setProviderLoading] = useState(true);
   const [error, setError] = useState("");
+  const [bookedSlots, setBookedSlots] = useState<BookedSlot[] | null>(null);
 
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(today);
@@ -59,6 +61,22 @@ export default function OrderPage() {
     };
   }, [id]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    getProviderAvailability(id, date)
+      .then((slots) => {
+        if (!ignore) setBookedSlots(slots);
+      })
+      .catch(() => {
+        if (!ignore) setBookedSlots([]);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [id, date]);
+
   const hours = useMemo(() => {
     const diff = parseMinutes(endTime) - parseMinutes(startTime);
     return diff > 0 ? diff / 60 : 0;
@@ -82,6 +100,12 @@ export default function OrderPage() {
   const selectedVehicleCompatible = Boolean(
     provider && selectedVehicle && provider.connectors.includes(selectedVehicle.connector),
   );
+  const overlappingSlot = useMemo(
+    () => bookedSlots?.find((slot) => overlapsSelectedTime(startTime, endTime, slot)),
+    [bookedSlots, startTime, endTime],
+  );
+  const availabilityLoading = bookedSlots === null;
+  const selectedSlotAvailable = hours > 0 && !overlappingSlot;
 
   if (providerLoading) return <div className="min-h-dvh flex items-center justify-center" style={{ background: "var(--bg)", color: "var(--text)" }}>Loading order…</div>;
 
@@ -91,6 +115,10 @@ export default function OrderPage() {
     if (!p) return;
     if (!selectedVehicleCompatible) {
       setError("Your selected vehicle is not compatible with this station.");
+      return;
+    }
+    if (!selectedSlotAvailable) {
+      setError("This time slot is already booked. Please choose another time.");
       return;
     }
     setLoading(true);
@@ -142,7 +170,10 @@ export default function OrderPage() {
           </h2>
           <div className="flex flex-col gap-2">
             <Field label="Date">
-              <input type="date" value={date} min={today} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-green-400" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(74,222,128,0.2)", color: "var(--text)", colorScheme: "dark" }} />
+              <input type="date" value={date} min={today} onChange={(e) => {
+                setBookedSlots(null);
+                setDate(e.target.value);
+              }} className="w-full px-3 py-2.5 rounded-xl text-sm outline-none focus:ring-1 focus:ring-green-400" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(74,222,128,0.2)", color: "var(--text)", colorScheme: "dark" }} />
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Start">
@@ -157,6 +188,21 @@ export default function OrderPage() {
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>Duration: <strong style={{ color: "var(--accent)" }}>{hours.toFixed(1)} hrs</strong></p>
           ) : (
             <p className="text-xs" style={{ color: "#f87171" }}>End time must be after start time.</p>
+          )}
+          {availabilityLoading && <p className="text-xs" style={{ color: "var(--text-muted)" }}>Checking availability…</p>}
+          {overlappingSlot && (
+            <p className="text-xs leading-relaxed" style={{ color: "#fca5a5" }}>
+              Already booked from {formatSlotTime(overlappingSlot.startTime)} to {formatSlotTime(overlappingSlot.endTime)}.
+            </p>
+          )}
+          {bookedSlots && bookedSlots.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {bookedSlots.map((slot) => (
+                <span key={`${slot.startTime}-${slot.endTime}`} className="rounded-full px-2 py-1 text-[10px]" style={{ background: "rgba(248,113,113,0.12)", color: "#fca5a5", border: "1px solid rgba(248,113,113,0.2)" }}>
+                  {formatSlotTime(slot.startTime)}-{formatSlotTime(slot.endTime)}
+                </span>
+              ))}
+            </div>
           )}
         </div>
 
@@ -224,7 +270,7 @@ export default function OrderPage() {
 
       {/* Sticky confirm */}
       <div className="fixed bottom-0 left-0 right-0 px-5 py-4" style={{ background: "rgba(10,15,13,0.95)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(74,222,128,0.15)" }}>
-        <button onClick={handleConfirm} disabled={hours <= 0 || loading || !effectiveVehicleId || !selectedVehicleCompatible} className="w-full py-3.5 rounded-xl font-bold text-base hover:opacity-90 disabled:opacity-50 transition-opacity" style={{ background: "var(--accent)", color: "#0a0f0d" }}>
+        <button onClick={handleConfirm} disabled={!selectedSlotAvailable || availabilityLoading || loading || !effectiveVehicleId || !selectedVehicleCompatible} className="w-full py-3.5 rounded-xl font-bold text-base hover:opacity-90 disabled:opacity-50 transition-opacity" style={{ background: "var(--accent)", color: "#0a0f0d" }}>
           {loading ? "Processing payment…" : `Confirm & Pay ${total > 0 ? VN_DONG_FORMAT(total) : ""}`}
         </button>
       </div>
@@ -234,6 +280,24 @@ export default function OrderPage() {
 
 function toOffsetDateTime(date: string, time: string) {
   return `${date}T${time}:00+07:00`;
+}
+
+function overlapsSelectedTime(startTime: string, endTime: string, slot: BookedSlot) {
+  const selectedStart = parseMinutes(startTime);
+  const selectedEnd = parseMinutes(endTime);
+  const bookedStart = parseIsoTimeMinutes(slot.startTime);
+  const bookedEnd = parseIsoTimeMinutes(slot.endTime);
+
+  return selectedStart < bookedEnd && selectedEnd > bookedStart;
+}
+
+function parseIsoTimeMinutes(value: string) {
+  const time = value.split("T")[1]?.slice(0, 5) ?? "00:00";
+  return parseMinutes(time);
+}
+
+function formatSlotTime(value: string) {
+  return value.split("T")[1]?.slice(0, 5) ?? value;
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
