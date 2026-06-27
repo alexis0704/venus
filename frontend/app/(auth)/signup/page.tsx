@@ -19,7 +19,7 @@ function SignupForm() {
     // Mock signup: drivers continue to the app flow, providers enter the host dashboard.
     setTimeout(() => {
       if (role === "driver") router.push("/onboarding");
-      else router.push("/host/financial");
+      else router.push("/provider-onboarding");
     }, 1000);
   }
 
