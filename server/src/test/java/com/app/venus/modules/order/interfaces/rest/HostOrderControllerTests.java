@@ -154,6 +154,19 @@ class HostOrderControllerTests {
                 .andExpect(jsonPath("$.error").value("RESOURCE_NOT_FOUND"));
     }
 
+    @Test
+    void malformedStatusEnumUsesProductValidationError() throws Exception {
+        orderRepository.saveAndFlush(order("ord_host_bad_enum", station, OrderStatus.PENDING));
+
+        mockMvc.perform(patch("/api/v1/me/station/orders/{orderId}/status", "ord_host_bad_enum")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        { "status": "definitely-not-a-status" }
+                        """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.error").value("UNPROCESSABLE_ENTITY"));
+    }
+
     private Station station(String id, User provider) {
         return new Station(
                 id,

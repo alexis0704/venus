@@ -150,17 +150,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleInvalidRequestBody(
             HttpMessageNotReadableException exception,
             HttpServletRequest request) {
-        if (isProductApiRequest(request)) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new ProductApiError("REQUEST_BODY_INVALID", "Malformed request body."));
-        }
-
         Throwable rootCause = exception.getMostSpecificCause();
 
         if (rootCause instanceof InvalidFormatException invalidFormatException
                 && invalidFormatException.getTargetType() != null
                 && invalidFormatException.getTargetType().isEnum()) {
+
+            if (isProductApiRequest(request)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+            }
 
             String fieldName = extractFieldName(invalidFormatException);
 
@@ -170,6 +170,12 @@ public class GlobalExceptionHandler {
             return ResponseEntity
                     .badRequest()
                     .body(Response.error(ApiError.VALIDATION_FAILED).withMeta("errors", errors));
+        }
+
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("REQUEST_BODY_INVALID", "Malformed request body."));
         }
 
         return ResponseEntity

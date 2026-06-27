@@ -136,4 +136,19 @@ class BlockedSlotControllerTests {
         mockMvc.perform(delete("/api/v1/me/station/blocked-slots/{blockId}", "blk_delete_me"))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void malformedReasonEnumUsesProductValidationError() throws Exception {
+        mockMvc.perform(post("/api/v1/me/station/blocked-slots")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                          "startTime": "2026-06-29T10:00:00+07:00",
+                          "endTime": "2026-06-29T12:00:00+07:00",
+                          "reason": "Not A Real Reason"
+                        }
+                        """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.error").value("UNPROCESSABLE_ENTITY"));
+    }
 }
