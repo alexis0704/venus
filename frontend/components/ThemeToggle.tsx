@@ -7,7 +7,10 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const stored = localStorage.getItem("volzen-theme") as "dark" | "light" | null;
-    if (stored) setTheme(stored);
+    if (!stored) return;
+
+    document.documentElement.setAttribute("data-theme", stored);
+    queueMicrotask(() => setTheme(stored));
   }, []);
 
   function toggle() {

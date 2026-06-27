@@ -9,22 +9,49 @@ interface Props {
   onSelect: (id: string) => void;
 }
 
+type LeafletContainer = HTMLDivElement & {
+  _leaflet_id?: number;
+};
+
+function resetLeafletContainer(container: LeafletContainer) {
+  container.replaceChildren();
+  delete container.dataset.leafletInitialized;
+  delete container._leaflet_id;
+}
+
 export default function LeafletMap({ providers, selected, onSelect }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<LeafletContainer>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
   const markersRef = useRef<Map<string, import("leaflet").Marker>>(new Map());
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    const container = containerRef.current;
+    const markers = markersRef.current;
+    let disposed = false;
+
+    if (!container || mapRef.current) return;
 
     import("leaflet").then((L) => {
+      if (disposed || mapRef.current) return;
+
+      if (container.dataset.leafletInitialized === "true" || container._leaflet_id) {
+        resetLeafletContainer(container);
+      }
+
       // Fix default icon path (webpack mangles it)
       // ponytail: custom green marker via DivIcon instead of default png
-      const map = L.map(containerRef.current!, {
+      const map = L.map(container, {
         center: [10.775, 106.698],
         zoom: 14,
         zoomControl: false,
       });
+      container.dataset.leafletInitialized = "true";
+
+      if (disposed) {
+        map.remove();
+        resetLeafletContainer(container);
+        return;
+      }
 
       const isDark = document.documentElement.dataset.theme !== "light";
       const tileUrl = isDark
@@ -59,15 +86,18 @@ export default function LeafletMap({ providers, selected, onSelect }: Props) {
         const marker = L.marker([p.lat, p.lng], { icon })
           .addTo(map)
           .on("click", () => onSelect(p.id));
-        markersRef.current.set(p.id, marker);
+        markers.set(p.id, marker);
       });
 
       mapRef.current = map;
     });
 
     return () => {
+      disposed = true;
+      markers.clear();
       mapRef.current?.remove();
       mapRef.current = null;
+      resetLeafletContainer(container);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

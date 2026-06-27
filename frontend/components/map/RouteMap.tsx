@@ -7,19 +7,45 @@ interface Props {
   destination: [number, number];
 }
 
+type LeafletContainer = HTMLDivElement & {
+  _leaflet_id?: number;
+};
+
+function resetLeafletContainer(container: LeafletContainer) {
+  container.replaceChildren();
+  delete container.dataset.leafletInitialized;
+  delete container._leaflet_id;
+}
+
 export default function RouteMap({ origin, destination }: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<LeafletContainer>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
 
   useEffect(() => {
-    if (!ref.current || mapRef.current) return;
+    const container = ref.current;
+    let disposed = false;
+
+    if (!container || mapRef.current) return;
 
     import("leaflet").then((L) => {
+      if (disposed || mapRef.current) return;
+
+      if (container.dataset.leafletInitialized === "true" || container._leaflet_id) {
+        resetLeafletContainer(container);
+      }
+
       const center: [number, number] = [
         (origin[0] + destination[0]) / 2,
         (origin[1] + destination[1]) / 2,
       ];
-      const map = L.map(ref.current!, { center, zoom: 14, zoomControl: false });
+      const map = L.map(container, { center, zoom: 14, zoomControl: false });
+      container.dataset.leafletInitialized = "true";
+
+      if (disposed) {
+        map.remove();
+        resetLeafletContainer(container);
+        return;
+      }
 
       L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
         attribution: '© OpenStreetMap © CartoDB',
@@ -63,8 +89,10 @@ export default function RouteMap({ origin, destination }: Props) {
     });
 
     return () => {
+      disposed = true;
       mapRef.current?.remove();
       mapRef.current = null;
+      resetLeafletContainer(container);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
