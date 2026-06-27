@@ -12,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
+import com.app.venus.modules.provider.domain.BlockReason;
+import com.app.venus.modules.provider.domain.BlockedSlot;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
@@ -32,6 +35,7 @@ public class DemoDataSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final VehicleRepository vehicleRepository;
     private final StationRepository stationRepository;
+    private final BlockedSlotRepository blockedSlotRepository;
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
 
@@ -39,11 +43,13 @@ public class DemoDataSeeder implements CommandLineRunner {
             UserRepository userRepository,
             VehicleRepository vehicleRepository,
             StationRepository stationRepository,
+            BlockedSlotRepository blockedSlotRepository,
             OrderRepository orderRepository,
             ReviewRepository reviewRepository) {
         this.userRepository = userRepository;
         this.vehicleRepository = vehicleRepository;
         this.stationRepository = stationRepository;
+        this.blockedSlotRepository = blockedSlotRepository;
         this.orderRepository = orderRepository;
         this.reviewRepository = reviewRepository;
     }
@@ -66,6 +72,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         Station stationOne = station(
                 "pvd_p1",
                 providerOne,
+                "Nguyen Hue Home Charger",
                 "12 Nguyen Hue, District 1, Ho Chi Minh City",
                 "10.7769000",
                 "106.7009000",
@@ -79,6 +86,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         Station stationTwo = station(
                 "pvd_p2",
                 providerTwo,
+                "Le Loi Type 2 Bay",
                 "48 Le Loi, District 1, Ho Chi Minh City",
                 "10.7731000",
                 "106.7002000",
@@ -90,6 +98,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         Station stationThree = station(
                 "pvd_p3",
                 providerThree,
+                "Thu Duc Fast Charge",
                 "88 Xa Lo Ha Noi, Thu Duc City, Ho Chi Minh City",
                 "10.8024000",
                 "106.7147000",
@@ -108,6 +117,24 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "2026-06-28T11:00:00+07:00",
                 25000,
                 OrderStatus.CONFIRMED);
+        order(
+                "ord_demo_pending_host_action",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-06-28T14:00:00+07:00",
+                "2026-06-28T15:00:00+07:00",
+                25000,
+                OrderStatus.PENDING);
+        order(
+                "ord_demo_active_calendar",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-06-28T16:00:00+07:00",
+                "2026-06-28T17:30:00+07:00",
+                25000,
+                OrderStatus.ACTIVE);
         Order completedOne = order(
                 "ord_demo_completed_1",
                 stationOne,
@@ -115,6 +142,60 @@ public class DemoDataSeeder implements CommandLineRunner {
                 driver,
                 "2026-06-20T09:00:00+07:00",
                 "2026-06-20T11:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_january",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-01-15T08:00:00+07:00",
+                "2026-01-15T10:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_february",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-02-12T13:00:00+07:00",
+                "2026-02-12T14:30:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_march",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-03-18T18:00:00+07:00",
+                "2026-03-18T20:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_april",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-04-09T07:30:00+07:00",
+                "2026-04-09T09:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_may",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-05-23T11:00:00+07:00",
+                "2026-05-23T12:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_weekday",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-06-24T12:00:00+07:00",
+                "2026-06-24T13:30:00+07:00",
                 25000,
                 OrderStatus.COMPLETED);
         Order completedTwo = order(
@@ -148,6 +229,13 @@ public class DemoDataSeeder implements CommandLineRunner {
                 22000,
                 OrderStatus.CONFIRMED);
 
+        blockedSlot(
+                "blk_demo_p1_maintenance",
+                stationOne,
+                "2026-06-29T10:00:00+07:00",
+                "2026-06-29T12:00:00+07:00",
+                BlockReason.MAINTENANCE);
+
         orderRepository.save(confirmed);
     }
 
@@ -178,6 +266,7 @@ public class DemoDataSeeder implements CommandLineRunner {
     private Station station(
             String id,
             User provider,
+            String name,
             String address,
             String lat,
             String lng,
@@ -190,6 +279,7 @@ public class DemoDataSeeder implements CommandLineRunner {
                 .orElseGet(() -> stationRepository.save(new Station(
                         id,
                         provider,
+                        name,
                         address,
                         new BigDecimal(lat),
                         new BigDecimal(lng),
@@ -230,6 +320,18 @@ public class DemoDataSeeder implements CommandLineRunner {
             return;
         }
         reviewRepository.save(new Review(id, order, station, author, rating, comment));
+    }
+
+    private void blockedSlot(String id, Station station, String start, String end, BlockReason reason) {
+        if (blockedSlotRepository.existsById(id)) {
+            return;
+        }
+        blockedSlotRepository.save(new BlockedSlot(
+                id,
+                station,
+                OffsetDateTime.parse(start),
+                OffsetDateTime.parse(end),
+                reason));
     }
 
     private BigDecimal duration(String start, String end) {

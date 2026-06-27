@@ -25,6 +25,7 @@ import com.app.venus.shared.web.ProductApiError;
 import com.app.venus.shared.web.Response;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @RestControllerAdvice
@@ -130,21 +131,36 @@ public class GlobalExceptionHandler {
                 .body(buildValidationResponse(fieldErrors));
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> handleInvalidRequestBody(
-            HttpMessageNotReadableException exception,
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolation(
+            ConstraintViolationException exception,
             HttpServletRequest request) {
         if (isProductApiRequest(request)) {
             return ResponseEntity
                     .badRequest()
-                    .body(new ProductApiError("REQUEST_BODY_INVALID", "Malformed request body."));
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
         }
 
+        return ResponseEntity
+                .badRequest()
+                .body(Response.error(ApiError.VALIDATION_FAILED));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleInvalidRequestBody(
+            HttpMessageNotReadableException exception,
+            HttpServletRequest request) {
         Throwable rootCause = exception.getMostSpecificCause();
 
         if (rootCause instanceof InvalidFormatException invalidFormatException
                 && invalidFormatException.getTargetType() != null
                 && invalidFormatException.getTargetType().isEnum()) {
+
+            if (isProductApiRequest(request)) {
+                return ResponseEntity
+                        .badRequest()
+                        .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+            }
 
             String fieldName = extractFieldName(invalidFormatException);
 
@@ -154,6 +170,12 @@ public class GlobalExceptionHandler {
             return ResponseEntity
                     .badRequest()
                     .body(Response.error(ApiError.VALIDATION_FAILED).withMeta("errors", errors));
+        }
+
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("REQUEST_BODY_INVALID", "Malformed request body."));
         }
 
         return ResponseEntity

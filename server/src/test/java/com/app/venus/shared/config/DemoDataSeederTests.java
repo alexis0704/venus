@@ -8,10 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.app.venus.modules.order.infrastructure.OrderRepository;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
 import com.app.venus.modules.user.infrastructure.UserRepository;
 import com.app.venus.modules.vehicle.infrastructure.VehicleRepository;
+import com.app.venus.shared.domain.OrderStatus;
 
 @SpringBootTest(properties = "app.seed.demo-data=true")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -29,6 +31,9 @@ class DemoDataSeederTests {
     private StationRepository stationRepository;
 
     @Autowired
+    private BlockedSlotRepository blockedSlotRepository;
+
+    @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
@@ -39,6 +44,7 @@ class DemoDataSeederTests {
         long users = userRepository.count();
         long vehicles = vehicleRepository.count();
         long stations = stationRepository.count();
+        long blockedSlots = blockedSlotRepository.count();
         long orders = orderRepository.count();
         long reviews = reviewRepository.count();
 
@@ -47,12 +53,23 @@ class DemoDataSeederTests {
         assertThat(userRepository.count()).isEqualTo(users);
         assertThat(vehicleRepository.count()).isEqualTo(vehicles);
         assertThat(stationRepository.count()).isEqualTo(stations);
+        assertThat(blockedSlotRepository.count()).isEqualTo(blockedSlots);
         assertThat(orderRepository.count()).isEqualTo(orders);
         assertThat(reviewRepository.count()).isEqualTo(reviews);
         assertThat(userRepository.existsById("usr_demo_driver")).isTrue();
         assertThat(vehicleRepository.existsById("veh_demo_vf8")).isTrue();
         assertThat(stationRepository.existsById("pvd_p1")).isTrue();
+        assertThat(blockedSlotRepository.existsById("blk_demo_p1_maintenance")).isTrue();
         assertThat(orderRepository.existsById("ord_demo_completed_1")).isTrue();
         assertThat(reviewRepository.existsById("rev_demo_p1")).isTrue();
+        assertThat(orderRepository.countByProviderStationProviderIdAndStatus("usr_provider_p1", OrderStatus.PENDING))
+                .isGreaterThanOrEqualTo(1);
+        assertThat(orderRepository.countByProviderStationProviderIdAndStatus("usr_provider_p1", OrderStatus.ACTIVE))
+                .isGreaterThanOrEqualTo(1);
+        assertThat(orderRepository.countByProviderStationProviderIdAndStatus("usr_provider_p1", OrderStatus.COMPLETED))
+                .isGreaterThanOrEqualTo(7);
+        assertThat(orderRepository.findByProviderStationProviderIdOrderByStartTimeAsc("usr_provider_p1"))
+                .extracting(order -> order.getStartTime().getMonthValue())
+                .contains(1, 2, 3, 4, 5, 6);
     }
 }
