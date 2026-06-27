@@ -16,6 +16,7 @@ import org.springframework.validation.method.ParameterErrors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import com.app.venus.modules.ai.application.AiProviderException;
@@ -158,6 +159,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(Response.error(ApiError.REQUEST_BODY_INVALID));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleTypeMismatch(
+            MethodArgumentTypeMismatchException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .body(Response.error(ApiError.VALIDATION_FAILED));
     }
 
     @ExceptionHandler(AiProviderException.class)

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.venus.modules.provider.application.StationDistanceCalculator;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.order.infrastructure.OrderRepository;
 import com.app.venus.modules.user.domain.User;
 import com.app.venus.modules.user.infrastructure.UserRepository;
 import com.app.venus.shared.domain.Amenity;
@@ -23,6 +24,9 @@ import com.app.venus.shared.domain.Role;
 @SpringBootTest
 @Transactional
 class StationRepositoryTests {
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Autowired
     private StationRepository stationRepository;
 
@@ -36,6 +40,7 @@ class StationRepositoryTests {
 
     @BeforeEach
     void setUp() {
+        orderRepository.deleteAll();
         stationRepository.deleteAll();
         provider = userRepository.findById("usr_station_provider")
                 .orElseGet(() -> userRepository.saveAndFlush(new User(

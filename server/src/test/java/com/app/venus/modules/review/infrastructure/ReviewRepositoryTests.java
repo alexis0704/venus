@@ -15,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.venus.modules.order.domain.Order;
+import com.app.venus.modules.order.infrastructure.OrderRepository;
 import com.app.venus.modules.provider.domain.Station;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
@@ -33,6 +34,9 @@ class ReviewRepositoryTests {
     private ReviewRepository reviewRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private StationRepository stationRepository;
 
     @Autowired
@@ -48,6 +52,7 @@ class ReviewRepositoryTests {
     @BeforeEach
     void setUp() {
         reviewRepository.deleteAll();
+        orderRepository.deleteAll();
         stationRepository.deleteAll();
 
         author = userRepository.findById("usr_review_author")
