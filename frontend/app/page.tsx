@@ -214,7 +214,7 @@ export default function LandingPage() {
 
       {/* ── CTA — host angle ─────────────────────────────────── */}
       <section className="max-w-3xl mx-auto w-full px-6 pb-24">
-        <div className="glass p-10 text-center" style={{ background: "color-mix(in srgb, var(--accent) 6%, var(--glass-bg))", borderColor: "color-mix(in srgb, var(--accent) 30%, transparent)" }}>
+        <div className="p-10 text-center">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: "color-mix(in srgb, var(--accent) 15%, transparent)", border: "1px solid color-mix(in srgb, var(--accent) 30%, transparent)" }}>
             <Zap size={22} fill="currentColor" style={{ color: "var(--accent)" }} />
           </div>
