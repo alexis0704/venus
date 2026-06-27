@@ -20,6 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.provider.domain.BlockReason;
+import com.app.venus.modules.provider.domain.BlockedSlot;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
@@ -45,6 +48,9 @@ class ProviderControllerTests {
     private StationRepository stationRepository;
 
     @Autowired
+    private BlockedSlotRepository blockedSlotRepository;
+
+    @Autowired
     private ReviewRepository reviewRepository;
 
     @Autowired
@@ -62,6 +68,7 @@ class ProviderControllerTests {
     void setUp() {
         reviewRepository.deleteAll();
         orderRepository.deleteAll();
+        blockedSlotRepository.deleteAll();
         vehicleRepository.deleteAll();
         stationRepository.deleteAll();
 
@@ -200,15 +207,23 @@ class ProviderControllerTests {
                 "2026-06-28T14:00:00+07:00",
                 "2026-06-28T15:00:00+07:00",
                 OrderStatus.CANCELLED));
+        blockedSlotRepository.save(new BlockedSlot(
+                "blk_availability",
+                nearStation,
+                OffsetDateTime.parse("2026-06-28T16:00:00+07:00"),
+                OffsetDateTime.parse("2026-06-28T17:00:00+07:00"),
+                BlockReason.MAINTENANCE));
         orderRepository.flush();
+        blockedSlotRepository.flush();
 
         mockMvc.perform(get("/api/v1/providers/{providerId}/availability", nearStation.getId())
                 .param("date", "2026-06-28"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.date").value("2026-06-28"))
-                .andExpect(jsonPath("$.bookedSlots", hasSize(1)))
+                .andExpect(jsonPath("$.bookedSlots", hasSize(2)))
                 .andExpect(jsonPath("$.bookedSlots[0].startTime").value("2026-06-28T09:00:00+07:00"))
-                .andExpect(jsonPath("$.bookedSlots[0].endTime").value("2026-06-28T11:00:00+07:00"));
+                .andExpect(jsonPath("$.bookedSlots[0].endTime").value("2026-06-28T11:00:00+07:00"))
+                .andExpect(jsonPath("$.bookedSlots[1].startTime").value("2026-06-28T16:00:00+07:00"));
     }
 
     @Test

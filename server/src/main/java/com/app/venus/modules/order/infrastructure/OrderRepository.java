@@ -25,6 +25,8 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     List<Order> findByProviderStationProviderIdOrderByCreatedInstantDesc(String providerId, Pageable pageable);
 
+    List<Order> findByProviderStationProviderIdOrderByStartTimeAsc(String providerId);
+
     List<Order> findByProviderStationProviderIdAndStatusOrderByCreatedInstantDesc(
             String providerId,
             OrderStatus status,

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
@@ -31,16 +32,19 @@ public class ProviderDiscoveryService {
     private final StationRepository stationRepository;
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final BlockedSlotRepository blockedSlotRepository;
     private final StationDistanceCalculator distanceCalculator;
 
     public ProviderDiscoveryService(
             StationRepository stationRepository,
             ReviewRepository reviewRepository,
             OrderRepository orderRepository,
+            BlockedSlotRepository blockedSlotRepository,
             StationDistanceCalculator distanceCalculator) {
         this.stationRepository = stationRepository;
         this.reviewRepository = reviewRepository;
         this.orderRepository = orderRepository;
+        this.blockedSlotRepository = blockedSlotRepository;
         this.distanceCalculator = distanceCalculator;
     }
 
@@ -96,13 +100,20 @@ public class ProviderDiscoveryService {
                 .orElseThrow(() -> new NotFoundException("Provider not found."));
         OffsetDateTime start = date.atStartOfDay().atOffset(BUSINESS_OFFSET);
         OffsetDateTime end = start.plusDays(1);
-        List<BookedSlot> bookedSlots = orderRepository.findBookedSlotsForStationDate(
+        List<BookedSlot> orderSlots = orderRepository.findBookedSlotsForStationDate(
                 station.getId(),
                 start,
                 end,
                 OrderStatus.CANCELLED)
                 .stream()
                 .map(order -> new BookedSlot(order.getStartTime(), order.getEndTime()))
+                .toList();
+        List<BookedSlot> blockedSlots = blockedSlotRepository.findOverlappingSlots(station.getId(), start, end)
+                .stream()
+                .map(blockedSlot -> new BookedSlot(blockedSlot.getStartTime(), blockedSlot.getEndTime()))
+                .toList();
+        List<BookedSlot> bookedSlots = java.util.stream.Stream.concat(orderSlots.stream(), blockedSlots.stream())
+                .sorted(Comparator.comparing(BookedSlot::startTime))
                 .toList();
 
         return new AvailabilityResult(date, bookedSlots);

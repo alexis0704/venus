@@ -25,6 +25,7 @@ import com.app.venus.shared.web.ProductApiError;
 import com.app.venus.shared.web.Response;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import tools.jackson.databind.exc.InvalidFormatException;
 
 @RestControllerAdvice
@@ -128,6 +129,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(buildValidationResponse(fieldErrors));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolation(
+            ConstraintViolationException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .body(Response.error(ApiError.VALIDATION_FAILED));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
