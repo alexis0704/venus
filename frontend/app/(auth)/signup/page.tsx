@@ -16,10 +16,10 @@ function SignupForm() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    // ponytail: mock signup — driver goes to onboarding, provider TBD
+    // Mock signup: drivers continue to the app flow, providers enter the host dashboard.
     setTimeout(() => {
       if (role === "driver") router.push("/onboarding");
-      else router.push("/explore");
+      else router.push("/host/financial");
     }, 1000);
   }
 
