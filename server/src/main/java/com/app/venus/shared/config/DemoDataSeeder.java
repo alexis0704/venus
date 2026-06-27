@@ -117,6 +117,24 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "2026-06-28T11:00:00+07:00",
                 25000,
                 OrderStatus.CONFIRMED);
+        order(
+                "ord_demo_pending_host_action",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-06-28T14:00:00+07:00",
+                "2026-06-28T15:00:00+07:00",
+                25000,
+                OrderStatus.PENDING);
+        order(
+                "ord_demo_active_calendar",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-06-28T16:00:00+07:00",
+                "2026-06-28T17:30:00+07:00",
+                25000,
+                OrderStatus.ACTIVE);
         Order completedOne = order(
                 "ord_demo_completed_1",
                 stationOne,
@@ -124,6 +142,60 @@ public class DemoDataSeeder implements CommandLineRunner {
                 driver,
                 "2026-06-20T09:00:00+07:00",
                 "2026-06-20T11:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_january",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-01-15T08:00:00+07:00",
+                "2026-01-15T10:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_february",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-02-12T13:00:00+07:00",
+                "2026-02-12T14:30:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_march",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-03-18T18:00:00+07:00",
+                "2026-03-18T20:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_april",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-04-09T07:30:00+07:00",
+                "2026-04-09T09:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_may",
+                stationOne,
+                vehicle,
+                driver,
+                "2026-05-23T11:00:00+07:00",
+                "2026-05-23T12:00:00+07:00",
+                25000,
+                OrderStatus.COMPLETED);
+        order(
+                "ord_demo_completed_weekday",
+                stationOne,
+                typeTwoVehicle,
+                driver,
+                "2026-06-24T12:00:00+07:00",
+                "2026-06-24T13:30:00+07:00",
                 25000,
                 OrderStatus.COMPLETED);
         Order completedTwo = order(
