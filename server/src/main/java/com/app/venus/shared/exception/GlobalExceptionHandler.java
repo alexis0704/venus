@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import com.app.venus.modules.ai.application.AiProviderException;
+import com.app.venus.shared.web.ApiPaths;
+import com.app.venus.shared.web.ProductApiError;
 import com.app.venus.shared.web.Response;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -54,25 +56,61 @@ public class GlobalExceptionHandler {
                 .body(Response.error(exception.getError(), exception.getMessage()));
     }
 
+    @ExceptionHandler(ProductApiException.class)
+    public ResponseEntity<ProductApiError> handleProductApiException(
+            ProductApiException exception,
+            HttpServletRequest request) {
+        log.warn(
+                "Product API error at path={} error={} message={}",
+                request.getRequestURI(),
+                exception.getError(),
+                exception.getMessage());
+
+        return ResponseEntity
+                .status(exception.getStatus())
+                .body(new ProductApiError(exception.getError(), exception.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Response<Object>> handleRequestBodyValidation(
-            MethodArgumentNotValidException exception) {
+    public ResponseEntity<?> handleRequestBodyValidation(
+            MethodArgumentNotValidException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+        }
+
         return ResponseEntity
                 .badRequest()
                 .body(buildValidationResponse(exception.getBindingResult().getFieldErrors()));
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<Response<Object>> handleQueryOrPathValidation(
-            BindException exception) {
+    public ResponseEntity<?> handleQueryOrPathValidation(
+            BindException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+        }
+
         return ResponseEntity
                 .badRequest()
                 .body(buildValidationResponse(exception.getBindingResult().getFieldErrors()));
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<Response<Object>> handleMethodValidation(
-            HandlerMethodValidationException exception) {
+    public ResponseEntity<?> handleMethodValidation(
+            HandlerMethodValidationException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("VALIDATION_FAILED", "Validation failed."));
+        }
+
         List<FieldError> fieldErrors = exception.getParameterValidationResults()
                 .stream()
                 .filter(ParameterErrors.class::isInstance)
@@ -92,8 +130,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Response<Object>> handleInvalidRequestBody(
-            HttpMessageNotReadableException exception) {
+    public ResponseEntity<?> handleInvalidRequestBody(
+            HttpMessageNotReadableException exception,
+            HttpServletRequest request) {
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ProductApiError("REQUEST_BODY_INVALID", "Malformed request body."));
+        }
+
         Throwable rootCause = exception.getMostSpecificCause();
 
         if (rootCause instanceof InvalidFormatException invalidFormatException
@@ -127,14 +172,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response<Object>> handleUnexpectedException(
+    public ResponseEntity<?> handleUnexpectedException(
             Exception exception,
             HttpServletRequest request) {
         log.error("Unexpected error at path={}", request.getRequestURI(), exception);
 
+        if (isProductApiRequest(request)) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ProductApiError("INTERNAL_ERROR", "Internal server error."));
+        }
+
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Response.error(ApiError.INTERNAL_ERROR));
+    }
+
+    private boolean isProductApiRequest(HttpServletRequest request) {
+        return request.getRequestURI().startsWith(ApiPaths.API_V1 + "/");
     }
 
     private Response<Object> buildValidationResponse(List<FieldError> fieldErrors) {
