@@ -36,14 +36,14 @@ public class HostStationService {
 
     @Transactional(readOnly = true)
     public HostStationResponse getCurrentProviderStationResponse() {
-        Station station = stationRepository.findByProviderId(currentUserService.currentProviderId())
+        Station station = stationRepository.findFirstByProviderIdOrderByIdAsc(currentUserService.currentProviderId())
                 .orElseThrow(() -> new NotFoundException("Station not found."));
         return HostStationResponse.from(station);
     }
 
     @Transactional(readOnly = true)
     public Station getCurrentProviderStation() {
-        return stationRepository.findByProviderId(currentUserService.currentProviderId())
+        return stationRepository.findFirstByProviderIdOrderByIdAsc(currentUserService.currentProviderId())
                 .orElseThrow(() -> new NotFoundException("Station not found."));
     }
 
@@ -56,7 +56,7 @@ public class HostStationService {
         List<String> photoUrls = actualRequest.photoUrls() == null ? List.of() : actualRequest.photoUrls();
         boolean available = actualRequest.isAvailable() == null || actualRequest.isAvailable();
 
-        Station station = stationRepository.findByProviderId(provider.getId())
+        Station station = stationRepository.findFirstByProviderIdOrderByIdAsc(provider.getId())
                 .orElseGet(() -> new Station(
                         publicIdGenerator.nextId("pvd"),
                         provider,
@@ -93,7 +93,7 @@ public class HostStationService {
         List<String> photoUrls = request.photoUrls() == null ? List.of() : request.photoUrls();
         boolean available = request.isAvailable() == null || request.isAvailable();
 
-        Station station = stationRepository.findByProviderId(provider.getId())
+        Station station = stationRepository.findFirstByProviderIdOrderByIdAsc(provider.getId())
                 .orElseGet(() -> new Station(
                         publicIdGenerator.nextId("pvd"),
                         provider,

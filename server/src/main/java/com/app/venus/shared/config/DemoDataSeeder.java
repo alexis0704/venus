@@ -65,48 +65,107 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "https://cdn.volzen.vn/avatars/pvd_p2.jpg");
         User providerThree = user("usr_provider_p3", "An Nguyen", "p3@volzen.test", Role.PROVIDER,
                 "https://cdn.volzen.vn/avatars/pvd_p3.jpg");
+        User providerFour = user("usr_provider_p4", "Gia Han", "p4@volzen.test", Role.PROVIDER,
+                "https://cdn.volzen.vn/avatars/pvd_p4.jpg");
+        User providerFive = user("usr_provider_p5", "Bao Chau", "p5@volzen.test", Role.PROVIDER,
+                "https://cdn.volzen.vn/avatars/pvd_p5.jpg");
+        User providerSix = user("usr_provider_p6", "Quoc Bao", "p6@volzen.test", Role.PROVIDER,
+                "https://cdn.volzen.vn/avatars/pvd_p6.jpg");
+        User providerSeven = user("usr_provider_p7", "Thao Nguyen", "p7@volzen.test", Role.PROVIDER,
+                "https://cdn.volzen.vn/avatars/pvd_p7.jpg");
 
         Vehicle vehicle = vehicle("veh_demo_vf8", driver, "VinFast", "VF8", 2024, ConnectorType.CCS, true);
         Vehicle typeTwoVehicle = vehicle("veh_demo_model3", driver, "Tesla", "Model 3", 2023, ConnectorType.TYPE_2, false);
+        Vehicle chademoVehicle = vehicle("veh_demo_leaf", driver, "Nissan", "Leaf", 2021, ConnectorType.CHADEMO, false);
 
         Station stationOne = station(
                 "pvd_p1",
                 providerOne,
                 "Nguyen Hue Home Charger",
-                "12 Nguyen Hue, District 1, Ho Chi Minh City",
-                "10.7769000",
-                "106.7009000",
+                "Vinhomes Grand Park, Thu Duc City, Ho Chi Minh City",
+                "10.8789000",
+                "106.8021000",
                 25000,
                 Set.of(ConnectorType.CCS, ConnectorType.TYPE_2),
                 Set.of(Amenity.COFFEE, Amenity.WIFI, Amenity.PARKING),
                 List.of(
-                        "https://cdn.volzen.vn/stations/pvd_p1/photo_1.jpg",
-                        "https://cdn.volzen.vn/stations/pvd_p1/photo_2.jpg"),
+                        "/stations/pvd-p1-1.svg",
+                        "/stations/pvd-p1-2.svg"),
                 true);
         Station stationTwo = station(
                 "pvd_p2",
                 providerTwo,
                 "Le Loi Type 2 Bay",
-                "48 Le Loi, District 1, Ho Chi Minh City",
-                "10.7731000",
-                "106.7002000",
+                "Linh Trung, Thu Duc City, Ho Chi Minh City",
+                "10.8725000",
+                "106.7974000",
                 22000,
                 Set.of(ConnectorType.TYPE_2),
                 Set.of(Amenity.WIFI, Amenity.RESTROOM),
-                List.of("https://cdn.volzen.vn/stations/pvd_p2/photo_1.jpg"),
+                List.of("/stations/pvd-p2-1.svg"),
                 true);
         Station stationThree = station(
                 "pvd_p3",
                 providerThree,
                 "Thu Duc Fast Charge",
-                "88 Xa Lo Ha Noi, Thu Duc City, Ho Chi Minh City",
-                "10.8024000",
-                "106.7147000",
+                "Long Binh, Thu Duc City, Ho Chi Minh City",
+                "10.8842000",
+                "106.8078000",
                 30000,
                 Set.of(ConnectorType.CCS, ConnectorType.CHADEMO),
                 Set.of(Amenity.PARKING, Amenity.SECURITY),
-                List.of("https://cdn.volzen.vn/stations/pvd_p3/photo_1.jpg"),
+                List.of("/stations/pvd-p3-1.svg"),
                 true);
+        Station stationFour = station(
+                "pvd_p4",
+                providerFour,
+                "Sala Riverside Charge",
+                "Di An, Binh Duong",
+                "10.8959000",
+                "106.7895000",
+                28000,
+                Set.of(ConnectorType.CCS, ConnectorType.TYPE_2),
+                Set.of(Amenity.COVERED, Amenity.WIFI, Amenity.SECURITY),
+                List.of(
+                        "/stations/pvd-p4-1.svg",
+                        "/stations/pvd-p4-2.svg"),
+                true);
+        Station stationFive = station(
+                "pvd_p5",
+                providerFive,
+                "Binh Thanh Garden Charger",
+                "Phu Huu, Thu Duc City, Ho Chi Minh City",
+                "10.8618000",
+                "106.8136000",
+                24000,
+                Set.of(ConnectorType.TYPE_2),
+                Set.of(Amenity.PARKING, Amenity.COFFEE, Amenity.RESTROOM),
+                List.of("/stations/pvd-p5-1.svg"),
+                true);
+        Station stationSix = station(
+                "pvd_p6",
+                providerSix,
+                "District 7 Solar Bay",
+                "Tan Dong Hiep, Di An, Binh Duong",
+                "10.9125000",
+                "106.8027000",
+                26000,
+                Set.of(ConnectorType.CCS),
+                Set.of(Amenity.COVERED, Amenity.SNACKS, Amenity.WIFI),
+                List.of("/stations/pvd-p6-1.svg"),
+                true);
+        Station stationSeven = station(
+                "pvd_p7",
+                providerSeven,
+                "Tan Binh Night Charge",
+                "Phuoc Long B, Thu Duc City, Ho Chi Minh City",
+                "10.8309000",
+                "106.8242000",
+                21000,
+                Set.of(ConnectorType.TYPE_2, ConnectorType.CHADEMO),
+                Set.of(Amenity.RESTROOM, Amenity.SECURITY, Amenity.PARKING),
+                List.of("/stations/pvd-p7-1.svg"),
+                false);
 
         Order confirmed = order(
                 "ord_demo_confirmed",
@@ -215,6 +274,33 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "2026-06-22T16:00:00+07:00",
                 "2026-06-22T17:00:00+07:00",
                 22000,
+                OrderStatus.COMPLETED);
+        Order completedThree = order(
+                "ord_demo_completed_3",
+                stationFour,
+                typeTwoVehicle,
+                driver,
+                "2026-06-25T17:00:00+07:00",
+                "2026-06-25T19:00:00+07:00",
+                28000,
+                OrderStatus.COMPLETED);
+        Order completedFour = order(
+                "ord_demo_completed_4",
+                stationFive,
+                typeTwoVehicle,
+                driver,
+                "2026-06-26T08:00:00+07:00",
+                "2026-06-26T09:30:00+07:00",
+                24000,
+                OrderStatus.COMPLETED);
+        Order completedFive = order(
+                "ord_demo_completed_5",
+                stationSix,
+                vehicle,
+                driver,
+                "2026-06-27T19:00:00+07:00",
+                "2026-06-27T20:30:00+07:00",
+                26000,
                 OrderStatus.COMPLETED);
 
         /* ═══════════════════════════════════════════════════════
@@ -362,12 +448,21 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "2026-06-29T13:00:00+07:00", "2026-06-29T14:00:00+07:00", 22000, OrderStatus.CONFIRMED);
         order("ord_p3_upcoming", stationThree, vehicle, driver,
                 "2026-06-30T10:00:00+07:00", "2026-06-30T12:00:00+07:00", 30000, OrderStatus.CONFIRMED);
+        order("ord_demo_p4_pending", stationFour, typeTwoVehicle, driver,
+                "2026-06-29T18:00:00+07:00", "2026-06-29T19:30:00+07:00", 28000, OrderStatus.PENDING);
+        order("ord_demo_p6_confirmed", stationSix, vehicle, driver,
+                "2026-06-30T07:00:00+07:00", "2026-06-30T08:30:00+07:00", 26000, OrderStatus.CONFIRMED);
+        order("ord_demo_p7_completed", stationSeven, chademoVehicle, driver,
+                "2026-06-18T21:00:00+07:00", "2026-06-18T22:00:00+07:00", 21000, OrderStatus.COMPLETED);
 
         /* ═══════════════════════════════════════════════════════
            REVIEWS
            ═══════════════════════════════════════════════════════ */
         review("rev_demo_p1", completedOne, stationOne, driver, 5, "Great host, fast charger, highly recommend.");
         review("rev_demo_p3", completedTwo, stationThree, driver, 4, "Easy to find and reliable charging.");
+        review("rev_demo_p4", completedThree, stationFour, driver, 5, "Clean parking bay and smooth check-in.");
+        review("rev_demo_p5", completedFour, stationFive, driver, 4, "Nice waiting area with coffee nearby.");
+        review("rev_demo_p6", completedFive, stationSix, driver, 5, "Good evening slot and stable CCS charger.");
         review("rev_p1_extra_1", orderRepository.findById("ord_p1_sun_c").orElseThrow(), stationOne, driver, 5, "Smooth charging — will come back.");
         review("rev_p1_extra_2", orderRepository.findById("ord_p1_sat_b").orElseThrow(), stationOne, driver, 4, "Convenient location and fast response.");
         review("rev_p1_extra_3", orderRepository.findById("ord_p1_mon_a").orElseThrow(), stationOne, driver, 5, "Best charging spot in the area.");
@@ -391,6 +486,18 @@ public class DemoDataSeeder implements CommandLineRunner {
                 "2026-07-04T08:00:00+07:00", "2026-07-04T12:00:00+07:00", BlockReason.OTHER);
         blockedSlot("blk_demo_p2_other", stationTwo,
                 "2026-06-29T13:00:00+07:00", "2026-06-29T14:30:00+07:00", BlockReason.OTHER);
+        blockedSlot(
+                "blk_demo_p4_personal",
+                stationFour,
+                "2026-06-30T12:00:00+07:00",
+                "2026-06-30T14:00:00+07:00",
+                BlockReason.PERSONAL);
+        blockedSlot(
+                "blk_demo_p5_busy",
+                stationFive,
+                "2026-06-28T18:00:00+07:00",
+                "2026-06-28T20:00:00+07:00",
+                BlockReason.BUSY);
 
         orderRepository.save(confirmed);
     }
@@ -431,8 +538,24 @@ public class DemoDataSeeder implements CommandLineRunner {
             Set<Amenity> amenities,
             List<String> photoUrls,
             boolean available) {
-        return stationRepository.findById(id)
-                .orElseGet(() -> stationRepository.save(new Station(
+        Station existing = stationRepository.findById(id)
+                .orElse(null);
+
+        if (existing != null) {
+            existing.update(
+                    name,
+                    address,
+                    new BigDecimal(lat),
+                    new BigDecimal(lng),
+                    pricePerHour,
+                    connectorTypes,
+                    amenities,
+                    photoUrls,
+                    available);
+            return stationRepository.save(existing);
+        }
+
+        return stationRepository.save(new Station(
                         id,
                         provider,
                         name,
@@ -443,7 +566,7 @@ public class DemoDataSeeder implements CommandLineRunner {
                         connectorTypes,
                         amenities,
                         photoUrls,
-                        available)));
+                        available));
     }
 
     private Order order(
