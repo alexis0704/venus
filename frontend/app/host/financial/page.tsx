@@ -89,11 +89,12 @@ export default function FinancialDashboardPage() {
               <p className="text-xs leading-4 sm:text-sm" style={{ color: "var(--text-muted)" }}>{item.label}</p>
               <div className="mt-3 flex items-end justify-between gap-3">
                 <p className="text-xl font-bold tracking-tight sm:text-2xl" style={{ color: "var(--text)" }}>{item.value}</p>
-                <StatusBadge tone={
-                  item.delta === "Ready" ? "orange"
-                  : item.delta.includes("%") ? "green"
-                  : "slate"
-                }>{item.delta}</StatusBadge>
+                {item.delta !== "Ready" && (
+                  <StatusBadge tone={
+                    item.delta.includes("%") ? "green"
+                    : "slate"
+                  }>{item.delta}</StatusBadge>
+                )}
               </div>
             </ProviderCard>
           ))}
