@@ -23,7 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
+import com.app.venus.modules.provider.domain.BlockReason;
+import com.app.venus.modules.provider.domain.BlockedSlot;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
@@ -57,6 +60,9 @@ class OrderControllerTests {
     private OrderRepository orderRepository;
 
     @Autowired
+    private BlockedSlotRepository blockedSlotRepository;
+
+    @Autowired
     private ReviewRepository reviewRepository;
 
     private User driver;
@@ -70,6 +76,7 @@ class OrderControllerTests {
     void setUp() {
         reviewRepository.deleteAll();
         orderRepository.deleteAll();
+        blockedSlotRepository.deleteAll();
         vehicleRepository.deleteAll();
         stationRepository.deleteAll();
 
@@ -195,6 +202,22 @@ class OrderControllerTests {
                 .content(orderJson(station.getId(), incompatibleVehicle.getId(), "2026-06-28T12:00:00+07:00", "2026-06-28T13:00:00+07:00")))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error").value("UNPROCESSABLE_ENTITY"));
+
+        mockMvc.perform(post("/api/v1/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(orderJson(station.getId(), vehicle.getId(), "2026-06-28T10:00:00+07:00", "2026-06-28T12:00:00+07:00")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error").value("SLOT_UNAVAILABLE"));
+    }
+
+    @Test
+    void rejectsOrderOverlappingBlockedSlot() throws Exception {
+        blockedSlotRepository.saveAndFlush(new BlockedSlot(
+                "blk_order_conflict",
+                station,
+                OffsetDateTime.parse("2026-06-28T09:00:00+07:00"),
+                OffsetDateTime.parse("2026-06-28T11:00:00+07:00"),
+                BlockReason.MAINTENANCE));
 
         mockMvc.perform(post("/api/v1/orders")
                 .contentType(MediaType.APPLICATION_JSON)

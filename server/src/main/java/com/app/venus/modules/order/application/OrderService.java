@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
 import com.app.venus.modules.provider.domain.Station;
+import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.review.domain.Review;
 import com.app.venus.modules.review.infrastructure.ReviewRepository;
@@ -33,6 +34,7 @@ public class OrderService {
             OrderStatus.ACTIVE);
 
     private final OrderRepository orderRepository;
+    private final BlockedSlotRepository blockedSlotRepository;
     private final StationRepository stationRepository;
     private final VehicleRepository vehicleRepository;
     private final ReviewRepository reviewRepository;
@@ -42,6 +44,7 @@ public class OrderService {
 
     public OrderService(
             OrderRepository orderRepository,
+            BlockedSlotRepository blockedSlotRepository,
             StationRepository stationRepository,
             VehicleRepository vehicleRepository,
             ReviewRepository reviewRepository,
@@ -49,6 +52,7 @@ public class OrderService {
             PublicIdGenerator publicIdGenerator,
             OrderPricingService orderPricingService) {
         this.orderRepository = orderRepository;
+        this.blockedSlotRepository = blockedSlotRepository;
         this.stationRepository = stationRepository;
         this.vehicleRepository = vehicleRepository;
         this.reviewRepository = reviewRepository;
@@ -85,7 +89,8 @@ public class OrderService {
                 station.getId(),
                 startTime,
                 endTime,
-                BLOCKING_STATUSES)) {
+                BLOCKING_STATUSES)
+                || blockedSlotRepository.existsOverlappingSlot(station.getId(), startTime, endTime)) {
             throw new ConflictException("SLOT_UNAVAILABLE", "The requested time slot is no longer available.");
         }
 
