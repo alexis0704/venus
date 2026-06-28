@@ -285,9 +285,9 @@ export async function fetchFinancialData(): Promise<FinancialData> {
 
   const providerSummary: ProviderSummaryItem[] = api.summary.map((s) => ({
     label: s.label,
-    value: s.label.toLowerCase().includes("revenue")
-      ? formatVND(s.value)
-      : String(s.value),
+      value: s.label.toLowerCase().includes("revenue") || s.label.toLowerCase().includes("payout")
+        ? formatVND(s.value)
+        : String(s.value),
     delta: s.delta ?? (s.label === "Pending Payout" ? "Ready" : ""),
   }));
 
