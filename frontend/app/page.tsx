@@ -14,8 +14,11 @@ import {
   ChevronRight,
   Quote,
   AlertCircle,
+  Menu,
+  X,
 } from "lucide-react";
 import { useRef, useEffect, useState, type ReactNode } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const bebas = Bebas_Neue({ weight: "400", subsets: ["latin"] });
 import ThemeToggle from "@/components/ThemeToggle";
@@ -262,6 +265,8 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
+
+            {/* Desktop nav links */}
             {showProviderVerificationBadge && (
               <Link
                 href="/provider-onboarding?returning=true"
@@ -278,25 +283,71 @@ export default function LandingPage() {
             )}
             <Link
               href="/help"
-              className="text-sm px-4 py-2 rounded-2xl transition-opacity hover:opacity-80"
+              className="hidden sm:inline-block text-sm px-4 py-2 rounded-2xl transition-opacity hover:opacity-80"
               style={{ color: "var(--text-muted)" }}
             >
               Help
             </Link>
             <Link
               href="/login"
-              className="text-sm px-4 py-2 rounded-2xl transition-opacity hover:opacity-80"
+              className="hidden sm:inline-block text-sm px-4 py-2 rounded-2xl transition-opacity hover:opacity-80"
               style={{ color: "var(--text-muted)" }}
             >
               Sign in
             </Link>
             <Link
               href="/signup"
-              className="text-sm px-4 py-2 rounded-2xl font-medium transition-all hover:opacity-90 hover:scale-[1.02]"
+              className="hidden sm:inline-block text-sm px-4 py-2 rounded-2xl font-medium transition-all hover:opacity-90 hover:scale-[1.02]"
               style={PRIMARY_BTN}
             >
               Get started
             </Link>
+
+            {/* Mobile hamburger */}
+            <Sheet>
+              <SheetTrigger
+                className="sm:hidden w-9 h-9 rounded-full flex items-center justify-center transition-opacity hover:opacity-70"
+                style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)" }}
+                aria-label="Open menu"
+              >
+                <Menu size={18} style={{ color: "var(--text)" }} />
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-72 p-0 border-l"
+                style={{ background: "var(--bg)", borderColor: "var(--glass-border)" }}
+              >
+                <div className="flex flex-col h-full px-6 py-8 gap-6">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-lg tracking-tight" style={{ color: "var(--text)" }}>VOLZEN</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Link href="/help" className="text-sm px-4 py-3 rounded-2xl transition-opacity hover:opacity-70" style={{ color: "var(--text-muted)" }}>Help</Link>
+                    <Link href="/login" className="text-sm px-4 py-3 rounded-2xl transition-opacity hover:opacity-70" style={{ color: "var(--text-muted)" }}>Sign in</Link>
+                    <Link
+                      href="/signup"
+                      className="mt-2 text-sm px-4 py-3 rounded-2xl font-medium text-center transition-all hover:opacity-90"
+                      style={PRIMARY_BTN}
+                    >
+                      Get started
+                    </Link>
+                    {showProviderVerificationBadge && (
+                      <Link
+                        href="/provider-onboarding?returning=true"
+                        className="mt-1 flex items-center gap-1.5 rounded-2xl px-4 py-3 text-xs font-semibold transition-all hover:opacity-90"
+                        style={{ background: "rgba(15,118,110,0.12)", border: "1px solid rgba(15,118,110,0.28)", color: "#0f766e" }}
+                      >
+                        <AlertCircle size={14} />
+                        Verify host
+                      </Link>
+                    )}
+                  </div>
+                  <div className="mt-auto">
+                    <ThemeToggle />
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </nav>
       </header>

@@ -84,10 +84,10 @@ export default function ExplorePage() {
       </div>
 
       {/* Mobile bottom sheet */}
-      <div className="lg:hidden shrink-0 overflow-x-auto" style={{ borderTop: "1px solid var(--glass-border)", background: "var(--bg)" }}>
-        <div className="flex gap-3 px-4 py-4" style={{ minWidth: "max-content" }}>
+      <div className="lg:hidden shrink-0 overflow-y-auto max-h-[45dvh]" style={{ borderTop: "1px solid var(--glass-border)", background: "var(--bg)" }}>
+        <div className="flex flex-col gap-3 px-4 py-4">
           {providers.map((p) => (
-            <ProviderCardMini key={p.id} provider={p} active={selected === p.id} onSelect={() => setSelected(p.id)} />
+            <ProviderCard key={p.id} provider={p} active={selected === p.id} onSelect={() => setSelected(p.id)} />
           ))}
         </div>
       </div>

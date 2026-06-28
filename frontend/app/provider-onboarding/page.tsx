@@ -444,10 +444,10 @@ function ProviderOnboardingInner() {
                     Tải xuống, điền các thông tin cá nhân còn thiếu, rồi nộp cho Cổng thông tin Đăng ký doanh nghiệp quốc gia.
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <button
                     onClick={handleDownloadAndReturnHome}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
                     style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
                   >
                     Tải xuống & về trang chủ
@@ -457,7 +457,7 @@ function ProviderOnboardingInner() {
                       window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "pending");
                       router.push("/");
                     }}
-                    className="px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 hover:opacity-80"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 hover:opacity-80"
                     style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", color: "var(--text-muted)" }}
                   >
                     Về trang chủ

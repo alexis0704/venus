@@ -280,7 +280,14 @@ function BookingPanel({
           <h2 className="mt-1 text-xl font-bold" style={{ color: "var(--text)" }}>{booking.title}</h2>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <StatusBadge tone={booking.state === "Charging" ? "orange" : booking.state === "Booked" ? "slate" : booking.state === "Completed" ? "gray" : booking.state === "Available" ? "gray" : "gray"}>
+          <StatusBadge tone={
+            booking.state === "Charging"  ? "orange"
+            : booking.state === "Booked"  ? "slate"
+            : booking.state === "Pending" ? "yellow"
+            : booking.state === "Cancelled" ? "red"
+            : booking.state === "No-show" ? "purple"
+            : "gray"
+          }>
             {booking.state}
           </StatusBadge>
           <button type="button" onClick={onClose}
@@ -311,12 +318,18 @@ function TimelineCard({
   onSelect: (slot: BookingSlot) => void;
   horizontal?: boolean;
 }) {
+  const stateColors: Record<string, { bg: string; text: string; border: string }> = {
+    Available:  { bg: "rgba(148,163,184,0.08)", text: "#94a3b8",  border: "rgba(148,163,184,0.2)"  },
+    Booked:     { bg: "rgba(226,232,240,0.1)",  text: "#e2e8f0",  border: "rgba(226,232,240,0.25)" },
+    Blocked:    { bg: "rgba(148,163,184,0.08)", text: "#94a3b8",  border: "rgba(148,163,184,0.2)"  },
+    Charging:   { bg: "rgba(251,146,60,0.1)",   text: "#fb923c",  border: "rgba(251,146,60,0.25)"  },
+    Completed:  { bg: "rgba(148,163,184,0.06)", text: "#94a3b8",  border: "rgba(148,163,184,0.15)" },
+    Pending:    { bg: "rgba(234,179,8,0.1)",    text: "#eab308",  border: "rgba(234,179,8,0.25)"   },
+    Cancelled:  { bg: "rgba(239,68,68,0.08)",   text: "#ef4444",  border: "rgba(239,68,68,0.2)"    },
+    "No-show":  { bg: "rgba(168,85,247,0.08)",  text: "#a855f7",  border: "rgba(168,85,247,0.2)"   },
+  };
   const colors = slot
-    ? slot.state === "Available" ? { bg: "rgba(148,163,184,0.1)", text: "#94a3b8", border: "rgba(148,163,184,0.25)" }
-      : slot.state === "Booked" ? { bg: "rgba(226,232,240,0.1)", text: "#e2e8f0", border: "rgba(226,232,240,0.25)" }
-      : slot.state === "Blocked" ? { bg: "rgba(148,163,184,0.1)", text: "#94a3b8", border: "rgba(148,163,184,0.25)" }
-      : slot.state === "Charging" ? { bg: "rgba(251,146,60,0.1)", text: "#fb923c", border: "rgba(251,146,60,0.25)" }
-      : { bg: "rgba(148,163,184,0.08)", text: "#94a3b8", border: "rgba(148,163,184,0.15)" }
+    ? (stateColors[slot.state] ?? { bg: "rgba(148,163,184,0.08)", text: "#94a3b8", border: "rgba(148,163,184,0.15)" })
     : { bg: "rgba(148,163,184,0.04)", text: "var(--text-muted)", border: "rgba(148,163,184,0.1)" };
 
   if (horizontal) {

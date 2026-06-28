@@ -114,15 +114,15 @@ export default function RoutePage() {
         <RouteMap origin={routeOrigin} destination={dest} onRouteInfo={handleRouteInfo} />
 
         {/* Payment success badge */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style={{ background: "rgba(74,222,128,0.15)", border: "1px solid rgba(74,222,128,0.4)", backdropFilter: "blur(12px)", color: "var(--accent)" }}>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium" style={{ background: "color-mix(in srgb, var(--accent) 12%, transparent)", border: "1px solid color-mix(in srgb, var(--accent) 35%, transparent)", backdropFilter: "blur(12px)", color: "var(--accent)" }}>
           <CheckCircle size={14} /> Payment successful
         </div>
       </div>
 
       {/* Bottom info sheet */}
-      <div className="px-5 pt-5 pb-6" style={{ background: "rgba(10,15,13,0.97)", borderTop: "1px solid rgba(74,222,128,0.15)" }}>
+      <div className="px-5 pt-5 pb-6" style={{ background: "var(--bg)", borderTop: "1px solid var(--glass-border)" }}>
         <div className="flex items-center gap-3 mb-4">
-          <img src={p.avatar} alt={p.name} className="w-10 h-10 rounded-full object-cover border-2" style={{ borderColor: "rgba(74,222,128,0.4)" }} />
+          <img src={p.avatar} alt={p.name} className="w-10 h-10 rounded-full object-cover border-2" style={{ borderColor: "color-mix(in srgb, var(--accent) 40%, transparent)" }} />
           <div>
             <p className="font-semibold" style={{ color: "var(--text)" }}>{p.name}</p>
             <p className="text-xs flex items-center gap-1" style={{ color: "var(--text-muted)" }}><MapPin size={11} /> {p.address}</p>
@@ -132,7 +132,7 @@ export default function RoutePage() {
             <p className="font-bold" style={{ color: "var(--accent)" }}><Clock size={13} className="inline mr-0.5" />~{routeInfo?.durationMinutes ?? 8} min</p>
           </div>
         </div>
-        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl px-3 py-2 text-xs" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(74,222,128,0.15)", color: "var(--text-muted)" }}>
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl px-3 py-2 text-xs" style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", color: "var(--text-muted)" }}>
           <span>{locationSource === "gps" ? "Using live GPS" : "Using approximate start"}</span>
           <span>{routeInfo ? `${routeInfo.distanceKm.toFixed(1)} km · ${routeInfo.source === "route" ? "road route" : "straight estimate"}` : "Calculating route…"}</span>
         </div>
@@ -141,12 +141,12 @@ export default function RoutePage() {
           <div className="text-center py-3">
             <p className="font-bold text-lg mb-1" style={{ color: "var(--accent)" }}>You&apos;ve arrived!</p>
             <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>Plug in and start charging. Enjoy your stay.</p>
-            <button onClick={() => router.push("/explore")} className="px-8 py-3 rounded-xl font-semibold text-sm" style={{ background: "rgba(255,255,255,0.08)", color: "var(--text)", border: "1px solid rgba(74,222,128,0.2)" }}>
+            <button onClick={() => router.push("/explore")} className="px-8 py-3 rounded-xl font-semibold text-sm" style={{ background: "var(--glass-bg)", color: "var(--text)", border: "1px solid var(--glass-border)" }}>
               Back to map
             </button>
           </div>
         ) : (
-          <button onClick={() => setArrived(true)} className="w-full py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-opacity" style={{ background: "var(--accent)", color: "#0a0f0d" }}>
+          <button onClick={() => setArrived(true)} className="w-full py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-opacity" style={{ background: "var(--accent)", color: "var(--accent-fg)" }}>
             I&apos;ve arrived
           </button>
         )}

@@ -90,10 +90,11 @@ export default function AuthLayout({
       <main className="flex-1 flex items-center justify-center px-5 py-10 lg:py-0">
         <div className="w-full max-w-sm">
           {/* Mobile brand bar */}
-          <div className="lg:hidden mb-10">
-            <span className="text-lg font-bold tracking-tight" style={{ color: "var(--text)" }}>
+          <div className="lg:hidden mb-10 flex flex-col items-center text-center">
+            <span className="text-2xl font-bold tracking-tight" style={{ color: "var(--text)" }}>
               VOLZEN
             </span>
+            <span className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>EV Charging, Anytime</span>
           </div>
 
           {/* Card */}

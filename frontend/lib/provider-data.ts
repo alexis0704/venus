@@ -140,11 +140,14 @@ export const bookingHeatmapData = [
 ];
 
 export const bookingSlots = [
-  { id: "b1", time: "08:00", end: "09:30", title: "Lan Anh", state: "Booked", vehicle: "VinFast VF8", plate: "51F-882.12", battery: "34%", cost: "₫68,000" },
-  { id: "b2", time: "10:00", end: "11:00", title: "Available", state: "Available", vehicle: "", plate: "", battery: "", cost: "" },
-  { id: "b3", time: "12:00", end: "13:30", title: "Maintenance", state: "Blocked", vehicle: "", plate: "", battery: "", cost: "" },
-  { id: "b4", time: "15:00", end: "17:00", title: "Duc Huy", state: "Charging", vehicle: "Tesla Model 3", plate: "30E-771.09", battery: "61%", cost: "₫110,000" },
-  { id: "b5", time: "18:00", end: "19:00", title: "Completed", state: "Completed", vehicle: "BYD Atto 3", plate: "51K-120.44", battery: "92%", cost: "₫52,000" },
+  { id: "b1", time: "08:00", end: "09:30", title: "Lan Anh",    state: "Booked",    vehicle: "VinFast VF8",     plate: "51F-882.12", battery: "34%", cost: "₫68,000"  },
+  { id: "b2", time: "09:30", end: "10:00", title: "Minh Tran",  state: "Pending",   vehicle: "Hyundai IONIQ 5", plate: "51G-441.77", battery: "18%", cost: "₫26,000"  },
+  { id: "b3", time: "10:00", end: "11:30", title: "Available",  state: "Available", vehicle: "",                plate: "",           battery: "",    cost: ""          },
+  { id: "b4", time: "11:30", end: "12:00", title: "Hung Pham",  state: "Cancelled", vehicle: "VinFast VF9",     plate: "51K-112.33", battery: "",    cost: "₫34,000"  },
+  { id: "b5", time: "12:00", end: "13:30", title: "Maintenance", state: "Blocked",  vehicle: "",                plate: "",           battery: "",    cost: ""          },
+  { id: "b6", time: "14:00", end: "15:00", title: "Bao Nguyen", state: "No-show",   vehicle: "Kia EV6",         plate: "30H-889.01", battery: "",    cost: "₫52,000"  },
+  { id: "b7", time: "15:00", end: "17:00", title: "Duc Huy",    state: "Charging",  vehicle: "Tesla Model 3",   plate: "30E-771.09", battery: "61%", cost: "₫110,000" },
+  { id: "b8", time: "18:00", end: "19:00", title: "Thu Ha",     state: "Completed", vehicle: "BYD Atto 3",      plate: "51K-120.44", battery: "92%", cost: "₫52,000"  },
 ];
 
 export const heatmapDemand = [

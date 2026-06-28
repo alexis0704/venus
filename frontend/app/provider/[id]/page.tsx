@@ -56,7 +56,7 @@ export default function ProviderDetailPage() {
         <img src={p.photos[0]} alt={p.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,15,13,0.3) 0%, rgba(10,15,13,0.85) 100%)" }} />
         <button onClick={() => router.back()} className="absolute top-4 left-4 w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "rgba(10,15,13,0.7)", backdropFilter: "blur(8px)", border: "1px solid rgba(74,222,128,0.2)" }} aria-label="Go back">
-          <ArrowLeft size={16} style={{ color: "var(--text)" }} />
+          <ArrowLeft size={16} style={{ color: "#fff" }} />
         </button>
         {p.photos[1] && (
           <div className="absolute bottom-4 right-4 w-20 h-14 rounded-xl overflow-hidden border-2" style={{ borderColor: "rgba(74,222,128,0.3)" }}>

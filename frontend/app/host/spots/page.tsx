@@ -386,19 +386,19 @@ export default function SpotsPage() {
                   </button>
                 </div>
                 <div className="grid gap-3">
-                  <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
-                    <label className="grid gap-1.5 text-xs font-semibold" style={{ color: "var(--text-muted)" }}>
-                      Latitude
-                      <input className="h-12 rounded-lg px-4 text-sm outline-none transition-all duration-200"
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="grid gap-1">
+                      <span className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Latitude</span>
+                      <input className="h-10 rounded-lg px-3 text-xs font-mono outline-none transition-all duration-200"
                         style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
-                        placeholder="Latitude" value={spotForm.lat}
+                        placeholder="10.878072" value={spotForm.lat}
                         onChange={(e) => setSpotForm((current) => current && { ...current, lat: e.target.value })} />
                     </label>
-                    <label className="grid gap-1.5 text-xs font-semibold" style={{ color: "var(--text-muted)" }}>
-                      Longitude
-                      <input className="h-12 rounded-lg px-4 text-sm outline-none transition-all duration-200"
+                    <label className="grid gap-1">
+                      <span className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Longitude</span>
+                      <input className="h-10 rounded-lg px-3 text-xs font-mono outline-none transition-all duration-200"
                         style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
-                        placeholder="Longitude" value={spotForm.lng}
+                        placeholder="106.801247" value={spotForm.lng}
                         onChange={(e) => setSpotForm((current) => current && { ...current, lng: e.target.value })} />
                     </label>
                   </div>
@@ -435,14 +435,20 @@ export default function SpotsPage() {
                     style={{ background: spotForm.chargerType === "Slow Charging" ? "#e2e8f0" : "var(--glass-bg)", color: spotForm.chargerType === "Slow Charging" ? "#0a0f0d" : "var(--text-muted)" }}>
                     Slow Charging
                   </button>
-                  <input className="h-12 rounded-lg px-4 text-sm outline-none transition-all duration-200"
-                    style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
-                    type="number" min={1} max={4} placeholder="Slots" value={spotForm.slots}
-                    onChange={(e) => setSpotForm((current) => current && { ...current, slots: e.target.value })} />
-                  <input className="h-12 rounded-lg px-4 text-sm outline-none transition-all duration-200"
-                    style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
-                    type="number" min={1} placeholder="Price / Hour" value={spotForm.pricePerHour}
-                    onChange={(e) => setSpotForm((current) => current && { ...current, pricePerHour: e.target.value })} />
+                  <label className="grid gap-1">
+                    <span className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Connectors</span>
+                    <input className="h-10 rounded-lg px-3 text-xs outline-none transition-all duration-200"
+                      style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
+                      type="number" min={1} max={4} placeholder="e.g. 2" value={spotForm.slots}
+                      onChange={(e) => setSpotForm((current) => current && { ...current, slots: e.target.value })} />
+                  </label>
+                  <label className="grid gap-1">
+                    <span className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>Price (₫/hr)</span>
+                    <input className="h-10 rounded-lg px-3 text-xs outline-none transition-all duration-200"
+                      style={{ border: "1px solid var(--glass-border)", background: "var(--glass-bg)", color: "var(--text)" }}
+                      type="number" min={1} placeholder="e.g. 42000" value={spotForm.pricePerHour}
+                      onChange={(e) => setSpotForm((current) => current && { ...current, pricePerHour: e.target.value })} />
+                  </label>
                 </div>
               </div>
               <div>
