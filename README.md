@@ -65,6 +65,15 @@ No other configuration is required for local development. The backend uses an H2
 
 ## Running Locally
 
+### VS Code Run And Debug
+
+This repo includes checked-in VS Code launch/tasks config under `.vscode/`. After installing frontend dependencies and creating `server/.env`, you can open the Run and Debug panel in VS Code and start:
+
+- `Venus Full Stack` for backend + frontend with the default AI setup
+- `Venus Full Stack - OpenAI` for backend + frontend using OpenAI-compatible config
+
+Make sure Java 17+, Node.js 20+, and `OPENAI_API_KEY` in `server/.env` are set up before using the OpenAI debug profile.
+
 **Backend** (runs on port 8080)
 
 ```bash
