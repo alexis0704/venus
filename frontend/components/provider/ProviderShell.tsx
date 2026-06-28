@@ -17,6 +17,7 @@ const navItems = [
 export function ProviderShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const currentPage = navItems.find((item) => item.href === pathname)?.label ?? "Dashboard";
+  const showAddSpotAction = pathname !== "/host/spots";
 
   return (
     <div className="min-h-dvh overflow-x-hidden" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -42,13 +43,15 @@ export function ProviderShell({ children }: { children: ReactNode }) {
             >
               Provider account
             </span>
-            <Link
-              href="/host/spots"
-              className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold sm:px-4 transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
-              style={{ background: ACCENT, color: ACCENT_FG }}
-            >
-              <Plus size={16} /> <span className="hidden sm:inline">Add spot</span>
-            </Link>
+            {showAddSpotAction && (
+              <Link
+                href="/host/spots"
+                className="inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold sm:px-4 transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                style={{ background: ACCENT, color: ACCENT_FG }}
+              >
+                <Plus size={16} /> <span className="hidden sm:inline">Add spot</span>
+              </Link>
+            )}
           </div>
         </header>
       </div>
