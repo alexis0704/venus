@@ -165,6 +165,8 @@ export const chargingSpots = [
   {
     name: "Nguyen Hue Home Charger",
     address: "12 Nguyen Hue, District 1",
+    lat: 10.8789,
+    lng: 106.8021,
     status: "Active",
     rating: "4.9",
     sessions: 186,
@@ -175,6 +177,8 @@ export const chargingSpots = [
   {
     name: "Le Loi Type 2 Bay",
     address: "Linh Trung, Thu Duc City",
+    lat: 10.8725,
+    lng: 106.7974,
     status: "Active",
     rating: "4.8",
     sessions: 142,
@@ -185,6 +189,8 @@ export const chargingSpots = [
   {
     name: "Thu Duc Fast Charge",
     address: "Long Binh, Thu Duc City",
+    lat: 10.8842,
+    lng: 106.8078,
     status: "Active",
     rating: "4.7",
     sessions: 118,
@@ -195,6 +201,8 @@ export const chargingSpots = [
   {
     name: "Sala Riverside Charge",
     address: "Di An, Binh Duong",
+    lat: 10.8959,
+    lng: 106.7895,
     status: "Active",
     rating: "4.9",
     sessions: 126,
@@ -205,6 +213,8 @@ export const chargingSpots = [
   {
     name: "Binh Thanh Garden Charger",
     address: "Phu Huu, Thu Duc City",
+    lat: 10.8618,
+    lng: 106.8136,
     status: "Active",
     rating: "4.6",
     sessions: 98,
@@ -215,6 +225,8 @@ export const chargingSpots = [
   {
     name: "District 7 Solar Bay",
     address: "Tan Dong Hiep, Di An",
+    lat: 10.9125,
+    lng: 106.8027,
     status: "Active",
     rating: "4.8",
     sessions: 104,
@@ -225,6 +237,8 @@ export const chargingSpots = [
   {
     name: "Tan Binh Night Charge",
     address: "Phuoc Long B, Thu Duc City",
+    lat: 10.8309,
+    lng: 106.8242,
     status: "Inactive",
     rating: "4.5",
     sessions: 64,

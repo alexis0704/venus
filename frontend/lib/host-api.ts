@@ -131,11 +131,44 @@ export async function getMyStation(): Promise<ApiStationResponse | null> {
   }
 }
 
+export async function getMyStations(): Promise<ApiStationResponse[] | null> {
+  try {
+    return await request<ApiStationResponse[]>("/me/stations");
+  } catch {
+    return null;
+  }
+}
+
 export async function upsertMyStation(data: ApiUpsertStationRequest): Promise<ApiStationResponse | null> {
   try {
     return await request<ApiStationResponse>("/me/station", { method: "PUT", body: JSON.stringify(data) });
   } catch {
     return null;
+  }
+}
+
+export async function createMyStation(data: ApiUpsertStationRequest): Promise<ApiStationResponse | null> {
+  try {
+    return await request<ApiStationResponse>("/me/stations", { method: "POST", body: JSON.stringify(data) });
+  } catch {
+    return null;
+  }
+}
+
+export async function updateMyStation(stationId: string, data: ApiUpsertStationRequest): Promise<ApiStationResponse | null> {
+  try {
+    return await request<ApiStationResponse>(`/me/stations/${stationId}`, { method: "PUT", body: JSON.stringify(data) });
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteMyStation(stationId: string): Promise<boolean> {
+  try {
+    await request<void>(`/me/stations/${stationId}`, { method: "DELETE" });
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -386,14 +419,18 @@ export async function fetchBookingsData(): Promise<BookingsData> {
 // ── Spots Data Fetcher ─────────────────────────────
 
 export type ChargingSpot = {
+  id?: string;
   name: string;
   address: string;
+  lat?: number;
+  lng?: number;
   status: string;
   rating: string;
   sessions: number;
   price: string;
   slots: string;
   image: string;
+  isPersisted?: boolean;
 };
 
 export type StationPerformanceEntry = {
@@ -409,9 +446,26 @@ export type SpotsData = {
   stationPerformance: StationPerformanceEntry[];
 };
 
+function mapStationToSpot(station: ApiStationResponse, index = 0): ChargingSpot {
+  return {
+    id: station.id,
+    name: station.name,
+    address: station.address,
+    lat: Number(station.lat),
+    lng: Number(station.lng),
+    status: station.isAvailable ? "Active" : "Inactive",
+    rating: index === 0 ? "4.9" : "New",
+    sessions: index === 0 ? 186 : 0,
+    price: formatVND(station.pricePerHour) + "/hr",
+    slots: `${station.connectorTypes.length}/4`,
+    image: station.photoUrls[0] ?? "/stations/pvd-p1-1.svg",
+    isPersisted: true,
+  };
+}
+
 export async function fetchSpotsData(): Promise<SpotsData> {
-  const station = await getMyStation();
-  if (!station) {
+  const stations = await getMyStations();
+  if (!stations || stations.length === 0) {
     return {
       spots: mockChargingSpots as ChargingSpot[],
       stationPerformance: mockStationPerformance as StationPerformanceEntry[],
@@ -419,19 +473,7 @@ export async function fetchSpotsData(): Promise<SpotsData> {
   }
 
   return {
-    spots: [
-      {
-        name: station.name,
-        address: station.address,
-        status: station.isAvailable ? "Active" : "Inactive",
-        rating: "4.9",
-        sessions: 186,
-        price: formatVND(station.pricePerHour) + "/hr",
-        slots: `${station.connectorTypes.length}/4`,
-        image: station.photoUrls[0] ?? "/stations/pvd-p1-1.svg",
-      } as ChargingSpot,
-      ...(mockChargingSpots as ChargingSpot[]).slice(1),
-    ],
+    spots: stations.map(mapStationToSpot),
     stationPerformance: mockStationPerformance as StationPerformanceEntry[],
   };
 }
