@@ -13,6 +13,7 @@ import {
   PlugZap,
   ChevronRight,
   Quote,
+  AlertCircle,
 } from "lucide-react";
 import { useRef, useEffect, useState, type ReactNode } from "react";
 
@@ -206,11 +207,14 @@ const PRIMARY_BTN: React.CSSProperties = {
   color: "#ffffff",
 };
 
+const PROVIDER_VERIFICATION_STATUS_KEY = "volzen.providerVerificationStatus";
+
 /* ── Page ─────────────────────────────────────────────────── */
 
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
+  const [showProviderVerificationBadge, setShowProviderVerificationBadge] = useState(false);
 
   useEffect(() => {
     const el = heroRef.current;
@@ -224,6 +228,12 @@ export default function LandingPage() {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setShowProviderVerificationBadge(
+      window.localStorage.getItem(PROVIDER_VERIFICATION_STATUS_KEY) === "pending",
+    );
   }, []);
 
   return (
@@ -252,6 +262,20 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            {showProviderVerificationBadge && (
+              <Link
+                href="/provider-onboarding?returning=true"
+                className="hidden items-center gap-1.5 rounded-2xl px-3 py-2 text-xs font-semibold transition-all hover:opacity-90 active:scale-[0.98] sm:inline-flex"
+                style={{
+                  background: "rgba(15,118,110,0.12)",
+                  border: "1px solid rgba(15,118,110,0.28)",
+                  color: "#0f766e",
+                }}
+              >
+                <AlertCircle size={14} />
+                Verify host
+              </Link>
+            )}
             <Link
               href="/help"
               className="text-sm px-4 py-2 rounded-2xl transition-opacity hover:opacity-80"
@@ -283,6 +307,20 @@ export default function LandingPage() {
         className="relative flex flex-col items-center justify-center text-center px-6 min-h-svh overflow-hidden"
       >
         <div ref={heroContentRef} className="relative z-10">
+          {showProviderVerificationBadge && (
+            <Link
+              href="/provider-onboarding?returning=true"
+              className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{
+                background: "rgba(15,118,110,0.12)",
+                border: "1px solid rgba(15,118,110,0.28)",
+                color: "#0f766e",
+              }}
+            >
+              <AlertCircle size={16} />
+              Hoàn tất xác minh nhà cung cấp
+            </Link>
+          )}
           <h1
             className="text-6xl sm:text-8xl lg:text-9xl font-bold leading-[1.04] tracking-tight"
             style={{

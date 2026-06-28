@@ -3,6 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
+import { verifyProviderLicence } from "@/lib/host-api";
+
+const PROVIDER_VERIFICATION_STATUS_KEY = "volzen.providerVerificationStatus";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type Role = "bot" | "user";
@@ -150,8 +153,9 @@ function ProviderOnboardingInner() {
   const [generating, setGenerating] = useState(false);
   const [formReady, setFormReady] = useState(false);
 
-  const [returningStep, setReturningStep] = useState<"ask" | "upload" | "verifying" | "done">("ask");
+  const [returningStep, setReturningStep] = useState<"ask" | "upload" | "verifying" | "done" | "review">("ask");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [verificationMessage, setVerificationMessage] = useState("");
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -208,12 +212,27 @@ function ProviderOnboardingInner() {
     }
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
     setUploadedFile(f);
     setReturningStep("verifying");
-    setTimeout(() => setReturningStep("done"), 2200);
+    const result = await verifyProviderLicence(f);
+    if (result?.verified) {
+      window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "verified");
+      setReturningStep("done");
+      setTimeout(() => router.push("/host/financial"), 900);
+      return;
+    }
+    window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "pending");
+    setVerificationMessage(result?.message ?? "Chưa thể xác minh hồ sơ. Vui lòng thử lại hoặc tải ảnh rõ hơn.");
+    setReturningStep("review");
+  }
+
+  async function handleDownloadAndReturnHome() {
+    await downloadForm(answers);
+    window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "pending");
+    router.push("/");
   }
 
   // ── Returning dialog ───────────────────────────────────────────────────
@@ -238,7 +257,10 @@ function ProviderOnboardingInner() {
                   Đã có Giấy phép kinh doanh
                 </button>
                 <button
-                  onClick={() => router.push("/explore")}
+                  onClick={() => {
+                    window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "pending");
+                    router.push("/");
+                  }}
                   className="w-full py-3 rounded-xl text-sm transition-all duration-200 hover:opacity-80 active:scale-[0.98]"
                   style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", color: "var(--text-muted)" }}
                 >
@@ -287,6 +309,22 @@ function ProviderOnboardingInner() {
                 style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
               >
                 Vào Dashboard
+              </button>
+            </div>
+          )}
+
+          {returningStep === "review" && (
+            <div className="flex flex-col items-center gap-4 py-4 text-center">
+              <h2 className="text-xl font-semibold" style={{ color: "var(--text)" }}>Đang chờ xác minh</h2>
+              <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+                {verificationMessage}
+              </p>
+              <button
+                onClick={() => router.push("/")}
+                className="mt-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
+              >
+                Về trang chủ
               </button>
             </div>
           )}
@@ -408,14 +446,17 @@ function ProviderOnboardingInner() {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => downloadForm(answers)}
+                    onClick={handleDownloadAndReturnHome}
                     className="px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
                     style={{ background: "var(--accent)", color: "var(--accent-fg)" }}
                   >
-                    Tải xuống (.docx)
+                    Tải xuống & về trang chủ
                   </button>
                   <button
-                    onClick={() => router.push("/")}
+                    onClick={() => {
+                      window.localStorage.setItem(PROVIDER_VERIFICATION_STATUS_KEY, "pending");
+                      router.push("/");
+                    }}
                     className="px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 hover:opacity-80"
                     style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", color: "var(--text-muted)" }}
                   >
