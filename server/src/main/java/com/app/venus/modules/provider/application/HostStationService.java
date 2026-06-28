@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.venus.modules.provider.domain.Station;
 import com.app.venus.modules.provider.infrastructure.StationRepository;
 import com.app.venus.modules.provider.interfaces.dto.request.HostStationRequest;
+import com.app.venus.modules.provider.interfaces.dto.response.HostStationResponse;
 import com.app.venus.modules.user.application.DemoCurrentUserService;
 import com.app.venus.modules.user.domain.User;
 import com.app.venus.shared.domain.Amenity;
@@ -34,9 +35,54 @@ public class HostStationService {
     }
 
     @Transactional(readOnly = true)
+    public HostStationResponse getCurrentProviderStationResponse() {
+        Station station = stationRepository.findByProviderId(currentUserService.currentProviderId())
+                .orElseThrow(() -> new NotFoundException("Station not found."));
+        return HostStationResponse.from(station);
+    }
+
+    @Transactional(readOnly = true)
     public Station getCurrentProviderStation() {
         return stationRepository.findByProviderId(currentUserService.currentProviderId())
                 .orElseThrow(() -> new NotFoundException("Station not found."));
+    }
+
+    @Transactional
+    public HostStationResponse upsertCurrentProviderStationResponse(HostStationRequest request) {
+        HostStationRequest actualRequest = request;
+        User provider = currentUserService.currentProvider();
+        Set<ConnectorType> connectorTypes = parseConnectorTypes(actualRequest.connectorTypes());
+        Set<Amenity> amenities = parseAmenities(actualRequest.amenities());
+        List<String> photoUrls = actualRequest.photoUrls() == null ? List.of() : actualRequest.photoUrls();
+        boolean available = actualRequest.isAvailable() == null || actualRequest.isAvailable();
+
+        Station station = stationRepository.findByProviderId(provider.getId())
+                .orElseGet(() -> new Station(
+                        publicIdGenerator.nextId("pvd"),
+                        provider,
+                        actualRequest.name(),
+                        actualRequest.address(),
+                        actualRequest.lat(),
+                        actualRequest.lng(),
+                        actualRequest.pricePerHour(),
+                        connectorTypes,
+                        amenities,
+                        photoUrls,
+                        available));
+
+        station.update(
+                actualRequest.name(),
+                actualRequest.address(),
+                actualRequest.lat(),
+                actualRequest.lng(),
+                actualRequest.pricePerHour(),
+                connectorTypes,
+                amenities,
+                photoUrls,
+                available);
+
+        station = stationRepository.saveAndFlush(station);
+        return HostStationResponse.from(station);
     }
 
     @Transactional

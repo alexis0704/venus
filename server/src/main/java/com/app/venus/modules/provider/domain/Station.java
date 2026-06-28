@@ -153,15 +153,15 @@ public class Station extends Auditable {
     }
 
     public Set<ConnectorType> getConnectorTypes() {
-        return Set.copyOf(connectorTypes);
+        return new LinkedHashSet<>(connectorTypes);
     }
 
     public Set<Amenity> getAmenities() {
-        return Set.copyOf(amenities);
+        return new LinkedHashSet<>(amenities);
     }
 
     public List<String> getPhotoUrls() {
-        return List.copyOf(photoUrls);
+        return new ArrayList<>(photoUrls);
     }
 
     public boolean isAvailable() {

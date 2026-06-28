@@ -1,24 +1,46 @@
 "use client";
 
 import { ArrowDownToLine, CreditCard, Wallet } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { ProviderCard, ProviderShell, StatusBadge } from "@/components/provider/ProviderShell";
-import {
-  providerSummary, revenueTimeSeries, monthlyRevenue, weeklyRevenue,
-  occupancyRevenue, revenueBreakdown, transactions,
-} from "@/lib/provider-data";
+import { fetchFinancialData } from "@/lib/host-api";
+import type {
+  ProviderSummaryItem, TimeSeriesItem, MonthlyRevenueItem, WeeklyRevenueItem,
+  OccupancyRevenueItem, RevenueBreakdownItem, TransactionItem,
+} from "@/lib/host-api";
 
 const filters = ["Today", "This Week", "This Month", "This Year"];
 const formatVND = (v: number) => `₫${(v / 1_000_000).toFixed(1)}M`;
 
 export default function FinancialDashboardPage() {
   const [activeFilter, setActiveFilter] = useState("This Month");
-  const [selectedTx, setSelectedTx] = useState<(typeof transactions)[number] | null>(null);
+  const [selectedTx, setSelectedTx] = useState<TransactionItem | null>(null);
   const [notice, setNotice] = useState("Showing this month's provider performance.");
+  const [providerSummary, setProviderSummary] = useState<ProviderSummaryItem[]>([]);
+  const [revenueTimeSeries, setRevenueTimeSeries] = useState<TimeSeriesItem[]>([]);
+  const [monthlyRevenue, setMonthlyRevenue] = useState<MonthlyRevenueItem[]>([]);
+  const [weeklyRevenue, setWeeklyRevenue] = useState<WeeklyRevenueItem[]>([]);
+  const [occupancyRevenue, setOccupancyRevenue] = useState<OccupancyRevenueItem[]>([]);
+  const [revenueBreakdown, setRevenueBreakdown] = useState<RevenueBreakdownItem[]>([]);
+  const [transactions, setTransactions] = useState<TransactionItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFinancialData().then((data) => {
+      setProviderSummary(data.providerSummary);
+      setRevenueTimeSeries(data.revenueTimeSeries);
+      setMonthlyRevenue(data.monthlyRevenue);
+      setWeeklyRevenue(data.weeklyRevenue);
+      setOccupancyRevenue(data.occupancyRevenue);
+      setRevenueBreakdown(data.revenueBreakdown);
+      setTransactions(data.transactions);
+      setLoading(false);
+    });
+  }, []);
 
   function handleWithdraw() {
     setNotice("Withdrawal request created for ₫7.2M. Payout status is now pending.");
@@ -223,8 +245,8 @@ export default function FinancialDashboardPage() {
           <ProviderCard>
             <h2 className="font-bold" style={{ color: "var(--text)" }}>Transaction History</h2>
             <div className="mt-4 space-y-3 lg:hidden">
-              {transactions.map((tx) => (
-                <TransactionCard key={`${tx.date}-${tx.driver}`} tx={tx} onSelect={() => { setSelectedTx(tx); setNotice(`Selected ${tx.driver}'s ${tx.amount} transaction.`); }} />
+              {transactions.map((tx, i) => (
+                <TransactionCard key={`${tx.date}-${tx.driver}-${i}`} tx={tx} onSelect={() => { setSelectedTx(tx); setNotice(`Selected ${tx.driver}'s ${tx.amount} transaction.`); }} />
               ))}
             </div>
             <div className="mt-4 hidden overflow-x-auto rounded-3xl lg:block"
@@ -236,9 +258,9 @@ export default function FinancialDashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {transactions.map((tx) => (
+                  {transactions.map((tx, i) => (
                     <tr
-                      key={`${tx.date}-${tx.driver}`}
+                      key={`${tx.date}-${tx.driver}-${i}`}
                       onClick={() => { setSelectedTx(tx); setNotice(`Selected ${tx.driver}'s ${tx.amount} transaction.`); }}
                       className="cursor-pointer transition-all duration-200"
                       style={{ borderTop: "1px solid color-mix(in srgb, var(--glass-border) 40%, transparent)", color: "var(--text)" }}
@@ -285,7 +307,7 @@ export default function FinancialDashboardPage() {
   );
 }
 
-function TransactionCard({ tx, onSelect }: { tx: (typeof transactions)[number]; onSelect: () => void }) {
+function TransactionCard({ tx, onSelect }: { tx: TransactionItem; onSelect: () => void }) {
   return (
     <button type="button" onClick={onSelect} className="w-full rounded-xl p-4 text-left transition-all duration-200 active:scale-[0.99]"
       style={{ background: "color-mix(in srgb, var(--glass-bg) 60%, transparent)" }}>

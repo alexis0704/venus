@@ -217,24 +217,180 @@ public class DemoDataSeeder implements CommandLineRunner {
                 22000,
                 OrderStatus.COMPLETED);
 
+        /* ═══════════════════════════════════════════════════════
+           ADDITIONAL ORDERS — fill 12-month revenue, this week,
+           all stations, all statuses
+           ═══════════════════════════════════════════════════════ */
+
+        /* ── 2025 orders (1 per month, for year-selection) ── */
+        order("ord_2025_jan", stationOne, vehicle, driver,
+                "2025-01-12T08:00:00+07:00", "2025-01-12T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_feb", stationOne, typeTwoVehicle, driver,
+                "2025-02-18T14:00:00+07:00", "2025-02-18T16:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_mar", stationOne, vehicle, driver,
+                "2025-03-05T09:00:00+07:00", "2025-03-05T11:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_apr", stationOne, typeTwoVehicle, driver,
+                "2025-04-20T16:00:00+07:00", "2025-04-20T17:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_may", stationOne, vehicle, driver,
+                "2025-05-10T07:00:00+07:00", "2025-05-10T09:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_jun", stationOne, typeTwoVehicle, driver,
+                "2025-06-15T12:00:00+07:00", "2025-06-15T13:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_jul", stationOne, vehicle, driver,
+                "2025-07-04T10:00:00+07:00", "2025-07-04T12:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_aug", stationOne, typeTwoVehicle, driver,
+                "2025-08-22T15:00:00+07:00", "2025-08-22T17:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_sep", stationOne, vehicle, driver,
+                "2025-09-13T08:00:00+07:00", "2025-09-13T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_oct", stationOne, typeTwoVehicle, driver,
+                "2025-10-31T14:00:00+07:00", "2025-10-31T15:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_nov", stationOne, vehicle, driver,
+                "2025-11-08T09:00:00+07:00", "2025-11-08T11:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_2025_dec", stationOne, typeTwoVehicle, driver,
+                "2025-12-25T16:00:00+07:00", "2025-12-25T18:00:00+07:00", 25000, OrderStatus.COMPLETED);
+
+        /* ── 2026 H2 orders (Jul-Dec) for 12-month revenue chart ── */
+        order("ord_p1_jul_a", stationOne, vehicle, driver,
+                "2026-07-08T09:00:00+07:00", "2026-07-08T11:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_jul_b", stationOne, typeTwoVehicle, driver,
+                "2026-07-16T14:00:00+07:00", "2026-07-16T16:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p1_jul_c", stationOne, vehicle, driver,
+                "2026-07-25T18:00:00+07:00", "2026-07-25T19:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_aug_a", stationOne, typeTwoVehicle, driver,
+                "2026-08-05T08:00:00+07:00", "2026-08-05T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_aug_b", stationOne, vehicle, driver,
+                "2026-08-14T12:00:00+07:00", "2026-08-14T14:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_aug_c", stationOne, typeTwoVehicle, driver,
+                "2026-08-28T16:00:00+07:00", "2026-08-28T18:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p1_sep_a", stationOne, vehicle, driver,
+                "2026-09-10T07:00:00+07:00", "2026-09-10T09:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_sep_b", stationOne, typeTwoVehicle, driver,
+                "2026-09-22T15:00:00+07:00", "2026-09-22T17:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_oct_a", stationOne, vehicle, driver,
+                "2026-10-03T10:00:00+07:00", "2026-10-03T12:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_oct_b", stationOne, typeTwoVehicle, driver,
+                "2026-10-19T14:00:00+07:00", "2026-10-19T16:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p1_oct_c", stationOne, vehicle, driver,
+                "2026-10-29T18:00:00+07:00", "2026-10-29T19:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_nov_a", stationOne, typeTwoVehicle, driver,
+                "2026-11-07T08:00:00+07:00", "2026-11-07T10:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_nov_b", stationOne, vehicle, driver,
+                "2026-11-21T13:00:00+07:00", "2026-11-21T15:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_dec_a", stationOne, typeTwoVehicle, driver,
+                "2026-12-05T09:00:00+07:00", "2026-12-05T11:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p1_dec_b", stationOne, vehicle, driver,
+                "2026-12-18T14:00:00+07:00", "2026-12-18T16:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_dec_c", stationOne, typeTwoVehicle, driver,
+                "2026-12-26T17:00:00+07:00", "2026-12-26T19:00:00+07:00", 25000, OrderStatus.COMPLETED);
+
+        /* ── This week (Jun 22-28) — fill every day for weeklyRevenue ── */
+        // Monday Jun 22
+        order("ord_p1_mon_a", stationOne, vehicle, driver,
+                "2026-06-22T08:00:00+07:00", "2026-06-22T09:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_mon_b", stationOne, typeTwoVehicle, driver,
+                "2026-06-22T14:00:00+07:00", "2026-06-22T16:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        // Tuesday Jun 23
+        order("ord_p1_tue_a", stationOne, vehicle, driver,
+                "2026-06-23T07:00:00+07:00", "2026-06-23T09:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_tue_b", stationOne, typeTwoVehicle, driver,
+                "2026-06-23T12:00:00+07:00", "2026-06-23T13:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_tue_c", stationOne, vehicle, driver,
+                "2026-06-23T17:00:00+07:00", "2026-06-23T18:30:00+07:00", 30000, OrderStatus.COMPLETED);
+        // Wednesday Jun 24 — already have 2, add 1 more
+        order("ord_p1_wed_c", stationOne, typeTwoVehicle, driver,
+                "2026-06-24T08:00:00+07:00", "2026-06-24T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        // Thursday Jun 25
+        order("ord_p1_thu_a", stationOne, vehicle, driver,
+                "2026-06-25T08:00:00+07:00", "2026-06-25T09:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_thu_b", stationOne, typeTwoVehicle, driver,
+                "2026-06-25T13:00:00+07:00", "2026-06-25T15:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_thu_c", stationOne, vehicle, driver,
+                "2026-06-25T18:00:00+07:00", "2026-06-25T19:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        // Friday Jun 26 — already have cancelled order, add completed
+        order("ord_p1_fri_a", stationOne, typeTwoVehicle, driver,
+                "2026-06-26T08:00:00+07:00", "2026-06-26T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_fri_b", stationOne, vehicle, driver,
+                "2026-06-26T11:00:00+07:00", "2026-06-26T12:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_fri_c", stationOne, typeTwoVehicle, driver,
+                "2026-06-26T14:00:00+07:00", "2026-06-26T15:30:00+07:00", 30000, OrderStatus.COMPLETED);
+        // Saturday Jun 27 — already have 1, add 2 more
+        order("ord_p1_sat_b", stationOne, vehicle, driver,
+                "2026-06-27T08:00:00+07:00", "2026-06-27T10:00:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_sat_c", stationOne, typeTwoVehicle, driver,
+                "2026-06-27T14:00:00+07:00", "2026-06-27T16:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        // Sunday Jun 28 today — already have 1, add 2 more
+        order("ord_p1_sun_b", stationOne, vehicle, driver,
+                "2026-06-28T08:00:00+07:00", "2026-06-28T09:30:00+07:00", 25000, OrderStatus.COMPLETED);
+        order("ord_p1_sun_c", stationOne, typeTwoVehicle, driver,
+                "2026-06-28T10:00:00+07:00", "2026-06-28T11:00:00+07:00", 25000, OrderStatus.COMPLETED);
+
+        // Pending order today — shows in booking timeline
+        order("ord_p1_pending_lunch", stationOne, vehicle, driver,
+                "2026-06-28T12:00:00+07:00", "2026-06-28T13:00:00+07:00", 25000, OrderStatus.PENDING);
+        // Active order today — shows in booking timeline
+        order("ord_p1_active_evening", stationOne, typeTwoVehicle, driver,
+                "2026-06-28T18:00:00+07:00", "2026-06-28T19:30:00+07:00", 25000, OrderStatus.ACTIVE);
+        // Cancelled order
+        order("ord_p1_cancelled", stationOne, vehicle, driver,
+                "2026-06-26T16:00:00+07:00", "2026-06-26T17:00:00+07:00", 25000, OrderStatus.CANCELLED);
+
+        /* ── More orders at stationTwo and stationThree ── */
+        order("ord_p2_completed_a", stationTwo, typeTwoVehicle, driver,
+                "2026-06-25T10:00:00+07:00", "2026-06-25T11:00:00+07:00", 22000, OrderStatus.COMPLETED);
+        order("ord_p2_completed_b", stationTwo, typeTwoVehicle, driver,
+                "2026-06-20T14:00:00+07:00", "2026-06-20T15:30:00+07:00", 22000, OrderStatus.COMPLETED);
+        order("ord_p2_completed_c", stationTwo, typeTwoVehicle, driver,
+                "2026-06-15T09:00:00+07:00", "2026-06-15T11:00:00+07:00", 22000, OrderStatus.COMPLETED);
+        order("ord_p2_completed_d", stationTwo, typeTwoVehicle, driver,
+                "2026-06-10T16:00:00+07:00", "2026-06-10T17:00:00+07:00", 22000, OrderStatus.COMPLETED);
+        order("ord_p2_completed_e", stationTwo, typeTwoVehicle, driver,
+                "2026-05-28T12:00:00+07:00", "2026-05-28T14:00:00+07:00", 22000, OrderStatus.COMPLETED);
+        order("ord_p2_pending", stationTwo, typeTwoVehicle, driver,
+                "2026-06-28T16:00:00+07:00", "2026-06-28T17:00:00+07:00", 22000, OrderStatus.PENDING);
+        order("ord_p3_completed_a", stationThree, vehicle, driver,
+                "2026-06-26T09:00:00+07:00", "2026-06-26T10:30:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p3_completed_b", stationThree, vehicle, driver,
+                "2026-06-18T14:00:00+07:00", "2026-06-18T16:00:00+07:00", 30000, OrderStatus.COMPLETED);
+        order("ord_p3_completed_c", stationThree, vehicle, driver,
+                "2026-06-05T08:00:00+07:00", "2026-06-05T10:00:00+07:00", 30000, OrderStatus.COMPLETED);
+
+        /* ── Upcoming confirmed orders ── */
+        order("ord_p1_upcoming_tomorrow", stationOne, vehicle, driver,
+                "2026-06-29T08:00:00+07:00", "2026-06-29T09:30:00+07:00", 25000, OrderStatus.CONFIRMED);
+        order("ord_p1_upcoming_lunch", stationOne, typeTwoVehicle, driver,
+                "2026-06-29T12:00:00+07:00", "2026-06-29T13:30:00+07:00", 25000, OrderStatus.CONFIRMED);
+        order("ord_demo_upcoming", stationTwo, typeTwoVehicle, driver,
+                "2026-06-29T13:00:00+07:00", "2026-06-29T14:00:00+07:00", 22000, OrderStatus.CONFIRMED);
+        order("ord_p3_upcoming", stationThree, vehicle, driver,
+                "2026-06-30T10:00:00+07:00", "2026-06-30T12:00:00+07:00", 30000, OrderStatus.CONFIRMED);
+
+        /* ═══════════════════════════════════════════════════════
+           REVIEWS
+           ═══════════════════════════════════════════════════════ */
         review("rev_demo_p1", completedOne, stationOne, driver, 5, "Great host, fast charger, highly recommend.");
         review("rev_demo_p3", completedTwo, stationThree, driver, 4, "Easy to find and reliable charging.");
-        order(
-                "ord_demo_upcoming",
-                stationTwo,
-                typeTwoVehicle,
-                driver,
-                "2026-06-29T13:00:00+07:00",
-                "2026-06-29T14:00:00+07:00",
-                22000,
-                OrderStatus.CONFIRMED);
+        review("rev_p1_extra_1", orderRepository.findById("ord_p1_sun_c").orElseThrow(), stationOne, driver, 5, "Smooth charging — will come back.");
+        review("rev_p1_extra_2", orderRepository.findById("ord_p1_sat_b").orElseThrow(), stationOne, driver, 4, "Convenient location and fast response.");
+        review("rev_p1_extra_3", orderRepository.findById("ord_p1_mon_a").orElseThrow(), stationOne, driver, 5, "Best charging spot in the area.");
+        review("rev_p1_extra_4", orderRepository.findById("ord_p1_tue_a").orElseThrow(), stationOne, driver, 3, "Good but charger was a bit slow.");
+        review("rev_p1_extra_5", orderRepository.findById("ord_2025_jun").orElseThrow(), stationOne, driver, 5, "Reliable as always.");
+        review("rev_p2_1", orderRepository.findById("ord_p2_completed_a").orElseThrow(), stationTwo, driver, 4, "Clean and well maintained.");
+        review("rev_p2_2", orderRepository.findById("ord_p2_completed_b").orElseThrow(), stationTwo, driver, 5, "Amazing backyard setup!");
 
-        blockedSlot(
-                "blk_demo_p1_maintenance",
-                stationOne,
-                "2026-06-29T10:00:00+07:00",
-                "2026-06-29T12:00:00+07:00",
-                BlockReason.MAINTENANCE);
+        /* ═══════════════════════════════════════════════════════
+           BLOCKED SLOTS
+           ═══════════════════════════════════════════════════════ */
+        blockedSlot("blk_demo_p1_maintenance", stationOne,
+                "2026-06-29T10:00:00+07:00", "2026-06-29T12:00:00+07:00", BlockReason.MAINTENANCE);
+        blockedSlot("blk_demo_p1_busy", stationOne,
+                "2026-06-30T08:00:00+07:00", "2026-06-30T09:30:00+07:00", BlockReason.BUSY);
+        blockedSlot("blk_demo_p1_personal", stationOne,
+                "2026-07-01T14:00:00+07:00", "2026-07-01T16:00:00+07:00", BlockReason.PERSONAL);
+        blockedSlot("blk_p1_holiday", stationOne,
+                "2026-07-02T00:00:00+07:00", "2026-07-02T23:59:00+07:00", BlockReason.PERSONAL);
+        blockedSlot("blk_p1_weekend", stationOne,
+                "2026-07-04T08:00:00+07:00", "2026-07-04T12:00:00+07:00", BlockReason.OTHER);
+        blockedSlot("blk_demo_p2_other", stationTwo,
+                "2026-06-29T13:00:00+07:00", "2026-06-29T14:30:00+07:00", BlockReason.OTHER);
 
         orderRepository.save(confirmed);
     }

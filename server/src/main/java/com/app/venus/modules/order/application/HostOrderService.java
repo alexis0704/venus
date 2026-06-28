@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.venus.modules.order.domain.Order;
 import com.app.venus.modules.order.infrastructure.OrderRepository;
+import com.app.venus.modules.order.interfaces.dto.response.HostOrderResponses.HostOrdersResponse;
+import com.app.venus.modules.order.interfaces.dto.response.HostOrderResponses.UpdateHostOrderStatusResponse;
 import com.app.venus.modules.user.application.DemoCurrentUserService;
 import com.app.venus.shared.domain.OrderStatus;
 import com.app.venus.shared.exception.NotFoundException;
@@ -23,6 +25,11 @@ public class HostOrderService {
     public HostOrderService(OrderRepository orderRepository, DemoCurrentUserService demoCurrentUserService) {
         this.orderRepository = orderRepository;
         this.demoCurrentUserService = demoCurrentUserService;
+    }
+
+    @Transactional(readOnly = true)
+    public HostOrdersResponse listCurrentProviderOrdersResponse(String statusValue, Integer limit, Integer offset) {
+        return HostOrdersResponse.from(listCurrentProviderOrders(statusValue, limit, offset));
     }
 
     @Transactional(readOnly = true)
@@ -50,6 +57,11 @@ public class HostOrderService {
                 ? orderRepository.countByProviderStationProviderId(providerId)
                 : orderRepository.countByProviderStationProviderIdAndStatus(providerId, status);
         return new HostOrderListResult(total, effectiveLimit == 0 ? List.of() : pageRows);
+    }
+
+    @Transactional
+    public UpdateHostOrderStatusResponse updateCurrentProviderOrderStatusResponse(String orderId, String statusValue) {
+        return UpdateHostOrderStatusResponse.from(updateCurrentProviderOrderStatus(orderId, statusValue));
     }
 
     @Transactional

@@ -1,7 +1,10 @@
 package com.app.venus.modules.provider.interfaces.rest;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,11 @@ public class BlockedSlotController {
 
     public BlockedSlotController(BlockedSlotService blockedSlotService) {
         this.blockedSlotService = blockedSlotService;
+    }
+
+    @GetMapping(ApiPaths.API_V1 + "/me/station/spots")
+    public List<BlockedSlotResponse> getCurrentProviderSpots() {
+        return blockedSlotService.getCurrentProviderSpotsResponse();
     }
 
     @PostMapping(ApiPaths.API_V1 + "/me/station/blocked-slots")

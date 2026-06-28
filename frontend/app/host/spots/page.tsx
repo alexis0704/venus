@@ -1,13 +1,14 @@
 "use client";
 
 import { Bath, Camera, Car, Coffee, Edit3, Home, ParkingSquare, Plus, Star, Trash2, Wifi, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ElementType } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts";
 import { ProviderCard, ProviderShell, StatusBadge } from "@/components/provider/ProviderShell";
-import { chargingSpots, stationPerformance } from "@/lib/provider-data";
+import { fetchSpotsData, upsertMyStation } from "@/lib/host-api";
+import type { ChargingSpot, StationPerformanceEntry } from "@/lib/host-api";
 
 const amenities = [
   { label: "Covered Area", icon: Home },
@@ -18,16 +19,24 @@ const amenities = [
   { label: "Parking", icon: ParkingSquare },
 ];
 
-type Spot = (typeof chargingSpots)[number];
+type Spot = ChargingSpot;
 
 export default function SpotsPage() {
-  const [spots, setSpots] = useState<Spot[]>(chargingSpots);
+  const [spots, setSpots] = useState<Spot[]>([]);
+  const [stationPerformance, setStationPerformance] = useState<StationPerformanceEntry[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [chargerType, setChargerType] = useState<"Fast Charging" | "Slow Charging">("Fast Charging");
   const [isActive, setIsActive] = useState(true);
   const [uploaded, setUploaded] = useState(false);
   const [notice, setNotice] = useState("Tap a station card to view details.");
+
+  useEffect(() => {
+    fetchSpotsData().then((data) => {
+      setSpots(data.spots);
+      setStationPerformance(data.stationPerformance);
+    });
+  }, []);
 
   const selectedSpot = selectedIndex === null ? null : spots[selectedIndex];
   const editingSpot = editingIndex === null ? null : spots[editingIndex];
@@ -53,7 +62,7 @@ export default function SpotsPage() {
       sessions: 0,
       price: "₫40,000/hr",
       slots: "0/1",
-      image: "https://picsum.photos/seed/volzen-station-new/640/420",
+      image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=New+Station",
     };
     setSpots((current) => [draft, ...current]);
     setEditingIndex(0);
@@ -73,13 +82,15 @@ export default function SpotsPage() {
 
   function saveStation() {
     if (editingIndex === null || !editingSpot) return;
+    const newPrice = chargerType === "Fast Charging" ? 55000 : 35000;
     setSpots((current) =>
       current.map((spot, index) =>
         index === editingIndex
-          ? { ...spot, status: isActive ? "Active" : "Inactive", price: chargerType === "Fast Charging" ? "₫55,000/hr" : "₫35,000/hr", slots: chargerType === "Fast Charging" ? "1/2" : "2/3" }
+          ? { ...spot, status: isActive ? "Active" : "Inactive", price: `₫${newPrice.toLocaleString("vi-VN")}/hr`, slots: chargerType === "Fast Charging" ? "1/2" : "2/3" }
           : spot,
       ),
     );
+    upsertMyStation({ name: editingSpot.name, address: editingSpot.address, lat: 10.772, lng: 106.698, pricePerHour: newPrice, connectorTypes: ["Type 2"], amenities: ["Coffee", "WiFi"], photoUrls: [], isAvailable: isActive });
     setNotice(`${editingSpot.name} saved.`);
     setEditingIndex(null);
   }
@@ -129,7 +140,7 @@ export default function SpotsPage() {
             <ProviderCard key={`${spot.name}-${index}`} className="overflow-hidden p-0">
               <div className="h-1.5 w-full" style={{ background: spot.status === "Active" ? "#e2e8f0" : "#94a3b8" }} />
               <button type="button" onClick={() => setSelectedIndex(index)} className="block w-full text-left">
-                <img src={spot.image} alt={spot.name} className="h-40 w-full object-cover" />
+                <img src={spot.image} alt={spot.name} className="h-40 w-full object-cover" onError={(e) => { e.currentTarget.src = "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Image+Error"; e.currentTarget.style.objectFit = "none"; }} />
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -177,7 +188,7 @@ export default function SpotsPage() {
         {/* Spot detail modal */}
         {selectedSpot && (
           <SpotModal title="Charging Spot Details" onClose={() => setSelectedIndex(null)}>
-            <img src={selectedSpot.image} alt={selectedSpot.name} className="h-44 w-full rounded-xl object-cover" />
+            <img src={selectedSpot.image} alt={selectedSpot.name} className="h-44 w-full rounded-xl object-cover" onError={(e) => { e.currentTarget.src = "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Image+Error"; e.currentTarget.style.objectFit = "none"; }} />
             <div className="mt-4 flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-bold" style={{ color: "var(--text)" }}>{selectedSpot.name}</h2>

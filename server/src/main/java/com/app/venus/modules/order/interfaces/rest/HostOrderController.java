@@ -31,15 +31,13 @@ public class HostOrderController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) @Min(0) Integer limit,
             @RequestParam(required = false) @Min(0) Integer offset) {
-        return HostOrdersResponse.from(hostOrderService.listCurrentProviderOrders(status, limit, offset));
+        return hostOrderService.listCurrentProviderOrdersResponse(status, limit, offset);
     }
 
     @PatchMapping(ApiPaths.API_V1 + "/me/station/orders/{orderId}/status")
     public UpdateHostOrderStatusResponse updateCurrentProviderOrderStatus(
             @PathVariable String orderId,
             @Valid @RequestBody UpdateHostOrderStatusRequest request) {
-        return UpdateHostOrderStatusResponse.from(hostOrderService.updateCurrentProviderOrderStatus(
-                orderId,
-                request.status()));
+        return hostOrderService.updateCurrentProviderOrderStatusResponse(orderId, request.status());
     }
 }

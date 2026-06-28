@@ -6,17 +6,17 @@
 /* ── Dark theme (default) ─────────────────────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg: #0a0f0d;
+  --bg: #0a0a0a;
   --surface: rgba(255, 255, 255, 0.05);
   --surface-hover: rgba(255, 255, 255, 0.08);
-  --accent: #4ade80;
-  --accent-fg: #0a0f0d;
-  --accent-dim: #16a34a;
-  --text: #f0fdf4;
-  --text-muted: #86efac;
+  --accent: #ffffff;
+  --accent-fg: #0a0a0a;
+  --accent-dim: #737373;
+  --text: #f5f5f5;
+  --text-muted: #a3a3a3;
   --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(74, 222, 128, 0.18);
-  --divider: rgba(74, 222, 128, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --divider: rgba(255, 255, 255, 0.08);
 
   /* ShadCN compat */
   --background: var(--bg);
@@ -33,17 +33,17 @@
 
 /* ── Light theme ──────────────────────────────────────────── */
 [data-theme="light"] {
-  --bg: #f4faf7;
-  --surface: rgba(255, 255, 255, 0.75);
-  --surface-hover: rgba(255, 255, 255, 0.95);
-  --accent: #16a34a;
+  --bg: #ffffff;
+  --surface: rgba(0, 0, 0, 0.03);
+  --surface-hover: rgba(0, 0, 0, 0.06);
+  --accent: #000000;
   --accent-fg: #ffffff;
-  --accent-dim: #15803d;
-  --text: #0d1f18;
-  --text-muted: #3d6b52;
+  --accent-dim: #525252;
+  --text: #171717;
+  --text-muted: #737373;
   --glass-bg: rgba(255, 255, 255, 0.6);
-  --glass-border: rgba(22, 163, 74, 0.18);
-  --divider: rgba(22, 163, 74, 0.12);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --divider: rgba(0, 0, 0, 0.06);
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -52,7 +52,7 @@
   --muted: rgba(0, 0, 0, 0.04);
   --muted-foreground: var(--text-muted);
   --border: var(--glass-border);
-  --input: rgba(0, 0, 0, 0.05);
+  --input: rgba(0, 0, 0, 0.06);
   --ring: var(--accent);
 }
 
@@ -80,8 +80,29 @@ body {
 }
 .glass-hover:hover {
   background: var(--surface-hover);
-  border-color: rgba(var(--accent-rgb, 74 222 128), 0.35);
+  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
+}
+
+/* ── Scroll reveal ────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ── Marquee carousel ─────────────────────────────────────── */

@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { MapPin, Zap, Star, ChevronRight, Navigation } from "lucide-react";
+import { MapPin, Star, ChevronRight, Navigation } from "lucide-react";
 import { VN_DONG_FORMAT } from "@/lib/domain";
 import type { Provider } from "@/lib/domain";
 import { searchProviders } from "@/lib/api";
@@ -54,7 +54,6 @@ export default function ExplorePage() {
       {/* Top bar */}
       <nav className="flex items-center gap-3 px-4 py-3 shrink-0" style={{ borderBottom: "1px solid var(--glass-border)", background: "var(--glass-bg)", backdropFilter: "blur(12px)" }}>
         <Link href="/" className="flex items-center gap-1.5">
-          <Zap size={18} style={{ color: "var(--accent)" }} fill="currentColor" />
           <span className="font-bold" style={{ color: "var(--text)" }}>VOLZEN</span>
         </Link>
         <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "rgba(74,222,128,0.12)", color: "var(--accent)" }}>Driver</span>

@@ -140,8 +140,8 @@ export default function ProviderDetailPage() {
       </div>
 
       {/* Sticky book button */}
-      <div className="fixed bottom-0 left-0 right-0 px-5 py-4" style={{ background: "rgba(10,15,13,0.95)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(74,222,128,0.15)" }}>
-        <button onClick={() => router.push(`/order/${p.id}`)} className="w-full py-3.5 rounded-xl font-bold text-base flex items-center justify-center gap-2 hover:opacity-90 transition-opacity" style={{ background: "var(--accent)", color: "#0a0f0d" }}>
+      <div className="fixed bottom-0 left-0 right-0 flex justify-center px-5 py-4" style={{ background: "var(--glass-bg)", backdropFilter: "blur(12px)", borderTop: "1px solid var(--glass-border)" }}>
+        <button onClick={() => router.push(`/order/${p.id}`)} className="px-8 py-3.5 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all hover:opacity-80 active:scale-[0.98]" style={{ background: "var(--surface-hover)", color: "var(--text)", border: "1px solid var(--glass-border)" }}>
           Book now <ChevronRight size={18} />
         </button>
       </div>

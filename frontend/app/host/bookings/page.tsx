@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ElementType } from "react";
 import { BatteryCharging, CalendarDays, Car, Clock, X, UserRound, BarChart3 } from "lucide-react";
 import {
@@ -8,13 +8,24 @@ import {
   PieChart, Pie, Cell,
 } from "recharts";
 import { ProviderCard, ProviderShell, StatusBadge } from "@/components/provider/ProviderShell";
-import { bookingSlots, bookingHeatmapData, slotDistribution } from "@/lib/provider-data";
+import { fetchBookingsData, createBlockedSlot } from "@/lib/host-api";
+import type { BookingSlot, BookingHeatmapEntry, SlotDistributionEntry } from "@/lib/host-api";
 
 export default function BookingsPage() {
-  const [slots, setSlots] = useState(bookingSlots);
-  const [selected, setSelected] = useState<(typeof bookingSlots)[number] | null>(null);
+  const [slots, setSlots] = useState<BookingSlot[]>([]);
+  const [heatmapData, setHeatmapData] = useState<BookingHeatmapEntry[]>([]);
+  const [slotDistribution, setSlotDistribution] = useState<SlotDistributionEntry[]>([]);
+  const [selected, setSelected] = useState<BookingSlot | null>(null);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [notice, setNotice] = useState("Calendar loaded for Nguyen Hue Home Charger.");
+
+  useEffect(() => {
+    fetchBookingsData().then((data) => {
+      setSlots(data.slots);
+      setHeatmapData(data.heatmapData);
+      setSlotDistribution(data.slotDistribution);
+    });
+  }, []);
 
   function updateSelectedState(state: string) {
     if (!selected) return;
@@ -25,7 +36,13 @@ export default function BookingsPage() {
   }
 
   function saveBlockTime() {
-    const blockedSlot = {
+    const now = new Date();
+    const startTime = new Date(now);
+    startTime.setHours(14, 0, 0, 0);
+    const endTime = new Date(now);
+    endTime.setHours(15, 0, 0, 0);
+    createBlockedSlot({ startTime: startTime.toISOString(), endTime: endTime.toISOString(), reason: "Personal" });
+    const blockedSlot: BookingSlot = {
       id: `blocked-${Date.now()}`,
       time: "14:00",
       end: "15:00",
@@ -41,10 +58,6 @@ export default function BookingsPage() {
     setShowBlockModal(false);
     setNotice("Blocked 2 PM - 3 PM for Nguyen Hue Home Charger.");
   }
-
-  const heatmapData = bookingHeatmapData.flatMap(d =>
-    d.hours.map(h => ({ day: d.day, hour: h.h, bookings: h.bookings }))
-  );
 
   return (
     <ProviderShell>
@@ -250,7 +263,7 @@ export default function BookingsPage() {
 function BookingPanel({
   booking, compact = false, onClose, onAction,
 }: {
-  booking: (typeof bookingSlots)[number];
+  booking: BookingSlot;
   compact?: boolean;
   onClose: () => void;
   onAction: (state: string) => void;
@@ -306,8 +319,8 @@ function TimelineCard({
   hour, slot, onSelect, horizontal = false,
 }: {
   hour: string;
-  slot: (typeof bookingSlots)[number] | undefined;
-  onSelect: (slot: (typeof bookingSlots)[number]) => void;
+  slot: BookingSlot | undefined;
+  onSelect: (slot: BookingSlot) => void;
   horizontal?: boolean;
 }) {
   const colors = slot

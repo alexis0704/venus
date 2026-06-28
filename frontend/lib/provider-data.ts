@@ -166,7 +166,7 @@ export const chargingSpots = [
     sessions: 186,
     price: "₫42,000/hr",
     slots: "2/3",
-    image: "https://picsum.photos/seed/volzen-station-1/640/420",
+    image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Nguyen+Hue+Charger",
   },
   {
     name: "District 3 Fast Bay",
@@ -176,7 +176,7 @@ export const chargingSpots = [
     sessions: 142,
     price: "₫55,000/hr",
     slots: "1/2",
-    image: "https://picsum.photos/seed/volzen-station-2/640/420",
+    image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Fast+Bay",
   },
   {
     name: "Weekend Garage Spot",
@@ -186,7 +186,7 @@ export const chargingSpots = [
     sessions: 98,
     price: "₫35,000/hr",
     slots: "0/1",
-    image: "https://picsum.photos/seed/volzen-station-3/640/420",
+    image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Garage+Spot",
   },
   {
     name: "Thu Duc Hub",
@@ -196,7 +196,7 @@ export const chargingSpots = [
     sessions: 134,
     price: "₫48,000/hr",
     slots: "2/4",
-    image: "https://picsum.photos/seed/volzen-station-4/640/420",
+    image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Thu+Duc+Hub",
   },
   {
     name: "Airport Fast Charge",
@@ -206,6 +206,6 @@ export const chargingSpots = [
     sessions: 52,
     price: "₫65,000/hr",
     slots: "0/2",
-    image: "https://picsum.photos/seed/volzen-station-5/640/420",
+    image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Airport+Charge",
   },
 ];

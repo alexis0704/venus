@@ -1,5 +1,6 @@
 package com.app.venus.modules.provider.application;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.app.venus.modules.provider.domain.BlockReason;
 import com.app.venus.modules.provider.domain.BlockedSlot;
 import com.app.venus.modules.provider.domain.Station;
 import com.app.venus.modules.provider.infrastructure.BlockedSlotRepository;
+import com.app.venus.modules.provider.interfaces.dto.response.BlockedSlotResponse;
 import com.app.venus.modules.user.application.DemoCurrentUserService;
 import com.app.venus.shared.domain.OrderStatus;
 import com.app.venus.shared.domain.PublicIdGenerator;
@@ -74,6 +76,15 @@ public class BlockedSlotService {
                 .orElseThrow(() -> new NotFoundException("Blocked slot not found."));
         blockedSlotRepository.delete(blockedSlot);
         blockedSlotRepository.flush();
+    }
+
+    @Transactional(readOnly = true)
+    public List<BlockedSlotResponse> getCurrentProviderSpotsResponse() {
+        Station station = hostStationService.getCurrentProviderStation();
+        return blockedSlotRepository.findByStationIdOrderByStartTimeAsc(station.getId())
+                .stream()
+                .map(BlockedSlotResponse::from)
+                .toList();
     }
 
     private BlockReason parseReason(String value) {

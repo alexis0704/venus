@@ -22,11 +22,11 @@ public class HostStationController {
 
     @GetMapping(ApiPaths.API_V1 + "/me/station")
     public HostStationResponse getCurrentProviderStation() {
-        return HostStationResponse.from(hostStationService.getCurrentProviderStation());
+        return hostStationService.getCurrentProviderStationResponse();
     }
 
     @PutMapping(ApiPaths.API_V1 + "/me/station")
     public HostStationResponse upsertCurrentProviderStation(@Valid @RequestBody HostStationRequest request) {
-        return HostStationResponse.from(hostStationService.upsertCurrentProviderStation(request));
+        return hostStationService.upsertCurrentProviderStationResponse(request);
     }
 }
