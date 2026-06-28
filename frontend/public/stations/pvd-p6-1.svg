@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="District 7 Solar Bay">
+  <rect width="960" height="620" fill="#fefce8"/>
+  <circle cx="812" cy="106" r="76" fill="#fde047"/>
+  <path d="M80 170h800l-86 116H166z" fill="#0f172a"/><path d="M168 204h620" stroke="#38bdf8" stroke-width="22" stroke-linecap="round"/>
+  <path d="M166 286h628v190H166z" fill="#475569"/>
+  <rect x="704" y="322" width="78" height="132" rx="16" fill="#22c55e"/>
+  <path d="M260 450h280c38 0 70 24 82 58H178c12-34 44-58 82-58z" fill="#111827"/><circle cx="282" cy="522" r="32" fill="#020617"/><circle cx="548" cy="522" r="32" fill="#020617"/>
+  <text x="56" y="92" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">District 7 Solar Bay</text>
+</svg>

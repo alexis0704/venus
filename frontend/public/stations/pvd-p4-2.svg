@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Covered charging bay">
+  <rect width="960" height="620" fill="#052e2b"/>
+  <path d="M86 170h788l-70 90H156z" fill="#ccfbf1"/><path d="M156 260h648v250H156z" fill="#0f766e"/>
+  <rect x="220" y="312" width="116" height="152" rx="18" fill="#f8fafc"/><rect x="626" y="312" width="116" height="152" rx="18" fill="#f8fafc"/>
+  <path d="M352 452h250c38 0 70 24 82 58H270c12-34 44-58 82-58z" fill="#111827"/><circle cx="362" cy="520" r="32" fill="#020617"/><circle cx="596" cy="520" r="32" fill="#020617"/>
+  <text x="88" y="112" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="38" font-weight="800">Covered EV Bay</text>
+</svg>

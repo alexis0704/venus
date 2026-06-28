@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Sala Riverside Charge">
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0fdfa"/><stop offset="1" stop-color="#0f766e"/></linearGradient>
+  <rect width="960" height="620" fill="url(#g)"/>
+  <path d="M0 430c170-52 310-50 470-12s310 40 490-18v220H0z" fill="#134e4a" opacity=".75"/>
+  <path d="M120 150h270v280H120zM430 112h310v318H430z" fill="#f8fafc" opacity=".9"/>
+  <rect x="716" y="318" width="86" height="150" rx="18" fill="#065f46"/><path d="M759 348v74" stroke="#bbf7d0" stroke-width="18" stroke-linecap="round"/>
+  <path d="M230 450h280c38 0 70 24 82 58H148c12-34 44-58 82-58z" fill="#0f172a"/><circle cx="252" cy="522" r="32" fill="#020617"/><circle cx="520" cy="522" r="32" fill="#020617"/>
+  <text x="56" y="88" fill="#064e3b" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Sala Riverside Charge</text>
+</svg>

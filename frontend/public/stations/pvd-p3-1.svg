@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Thu Duc Fast Charge">
+  <rect width="960" height="620" fill="#111827"/>
+  <path d="M0 390h960v230H0z" fill="#020617"/>
+  <path d="M96 132h768v288H96z" fill="#1e293b"/><path d="M136 172h688v74H136z" fill="#22c55e"/>
+  <rect x="132" y="294" width="116" height="170" rx="18" fill="#e2e8f0"/><rect x="690" y="294" width="116" height="170" rx="18" fill="#e2e8f0"/>
+  <path d="M334 446h250c38 0 70 25 82 58H252c12-33 44-58 82-58z" fill="#16a34a"/><circle cx="338" cy="516" r="33" fill="#020617"/><circle cx="574" cy="516" r="33" fill="#020617"/>
+  <text x="56" y="86" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Thu Duc Fast Charge</text>
+</svg>

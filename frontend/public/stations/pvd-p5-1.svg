@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Binh Thanh Garden Charger">
+  <rect width="960" height="620" fill="#dcfce7"/>
+  <circle cx="780" cy="160" r="94" fill="#86efac"/><circle cx="126" cy="328" r="104" fill="#bbf7d0"/>
+  <path d="M0 420h960v200H0z" fill="#365314"/>
+  <path d="M314 132h332v296H314z" fill="#f8fafc"/><path d="M360 194h240v234H360z" fill="#84cc16"/>
+  <rect x="690" y="312" width="86" height="154" rx="18" fill="#166534"/>
+  <path d="M250 456h290c38 0 70 24 82 58H168c12-34 44-58 82-58z" fill="#0f172a"/><circle cx="272" cy="526" r="32" fill="#020617"/><circle cx="548" cy="526" r="32" fill="#020617"/>
+  <text x="56" y="88" fill="#14532d" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Binh Thanh Garden Charger</text>
+</svg>

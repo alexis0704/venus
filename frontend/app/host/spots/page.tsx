@@ -62,7 +62,7 @@ export default function SpotsPage() {
       sessions: 0,
       price: "₫40,000/hr",
       slots: "0/1",
-      image: "https://placehold.co/640x420/0a0f0d/e2e8f0?text=New+Station",
+      image: "/stations/pvd-p1-2.svg",
     };
     setSpots((current) => [draft, ...current]);
     setEditingIndex(0);
@@ -140,7 +140,7 @@ export default function SpotsPage() {
             <ProviderCard key={`${spot.name}-${index}`} className="overflow-hidden p-0">
               <div className="h-1.5 w-full" style={{ background: spot.status === "Active" ? "#e2e8f0" : "#94a3b8" }} />
               <button type="button" onClick={() => setSelectedIndex(index)} className="block w-full text-left">
-                <img src={spot.image} alt={spot.name} className="h-40 w-full object-cover" onError={(e) => { e.currentTarget.src = "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Image+Error"; e.currentTarget.style.objectFit = "none"; }} />
+                <img src={spot.image} alt={spot.name} className="h-40 w-full object-cover" onError={(e) => { e.currentTarget.src = "/stations/pvd-p1-1.svg"; e.currentTarget.style.objectFit = "cover"; }} />
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -188,7 +188,7 @@ export default function SpotsPage() {
         {/* Spot detail modal */}
         {selectedSpot && (
           <SpotModal title="Charging Spot Details" onClose={() => setSelectedIndex(null)}>
-            <img src={selectedSpot.image} alt={selectedSpot.name} className="h-44 w-full rounded-xl object-cover" onError={(e) => { e.currentTarget.src = "https://placehold.co/640x420/0a0f0d/e2e8f0?text=Image+Error"; e.currentTarget.style.objectFit = "none"; }} />
+            <img src={selectedSpot.image} alt={selectedSpot.name} className="h-44 w-full rounded-xl object-cover" onError={(e) => { e.currentTarget.src = "/stations/pvd-p1-1.svg"; e.currentTarget.style.objectFit = "cover"; }} />
             <div className="mt-4 flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-xl font-bold" style={{ color: "var(--text)" }}>{selectedSpot.name}</h2>

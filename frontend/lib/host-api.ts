@@ -317,17 +317,11 @@ export type BookingsData = {
 
 function ordersToBookingSlots(orders: ApiOrder[]): BookingSlot[] {
   const HOURS = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
+  const now = new Date();
   const occupied: BookingSlot[] = orders.slice(0, 5).map((order) => {
     const start = order.startTime.slice(11, 16);
     const end = order.endTime.slice(11, 16);
-    const stateMap: Record<string, string> = {
-      pending: "Booked",
-      confirmed: "Booked",
-      active: "Charging",
-      completed: "Completed",
-      cancelled: "Available",
-    };
-    const state = stateMap[order.status] ?? "Booked";
+    const state = getBookingSlotState(order, now);
     return {
       id: order.id,
       time: start,
@@ -353,6 +347,19 @@ function ordersToBookingSlots(orders: ApiOrder[]): BookingSlot[] {
     cost: "",
   }));
   return [...occupied, ...available].sort((a, b) => a.time.localeCompare(b.time));
+}
+
+function getBookingSlotState(order: ApiOrder, now: Date): string {
+  const status = order.status.toLowerCase();
+  if (status === "cancelled") return "Available";
+  if (status === "completed") return "Completed";
+  if (status === "active") {
+    const startTime = new Date(order.startTime);
+    const endTime = new Date(order.endTime);
+    if (now >= startTime && now < endTime) return "Charging";
+    return now < startTime ? "Booked" : "Completed";
+  }
+  return "Booked";
 }
 
 export async function fetchBookingsData(): Promise<BookingsData> {
@@ -421,7 +428,7 @@ export async function fetchSpotsData(): Promise<SpotsData> {
         sessions: 186,
         price: formatVND(station.pricePerHour) + "/hr",
         slots: `${station.connectorTypes.length}/4`,
-        image: station.photoUrls[0] ?? "https://placehold.co/640x420/0a0f0d/e2e8f0?text=My+Station",
+        image: station.photoUrls[0] ?? "/stations/pvd-p1-1.svg",
       } as ChargingSpot,
       ...(mockChargingSpots as ChargingSpot[]).slice(1),
     ],

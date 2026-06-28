@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Tan Binh Night Charge">
+  <rect width="960" height="620" fill="#020617"/>
+  <circle cx="780" cy="122" r="64" fill="#e0f2fe" opacity=".9"/>
+  <path d="M0 408h960v212H0z" fill="#111827"/>
+  <path d="M112 160h270v248H112zM426 108h318v300H426z" fill="#1e293b"/>
+  <path d="M146 204h198M462 158h240" stroke="#38bdf8" stroke-width="18" stroke-linecap="round"/>
+  <rect x="700" y="318" width="86" height="150" rx="18" fill="#0ea5e9"/><circle cx="743" cy="370" r="23" fill="#e0f2fe"/>
+  <path d="M260 456h280c38 0 70 24 82 58H178c12-34 44-58 82-58z" fill="#22c55e"/><circle cx="282" cy="526" r="32" fill="#020617"/><circle cx="548" cy="526" r="32" fill="#020617"/>
+  <text x="56" y="88" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Tan Binh Night Charge</text>
+</svg>

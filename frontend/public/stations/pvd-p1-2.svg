@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Nguyen Hue charger close up">
+  <rect width="960" height="620" fill="#0b1220"/>
+  <rect x="78" y="82" width="804" height="456" rx="38" fill="#f8fafc"/>
+  <rect x="120" y="132" width="390" height="356" rx="28" fill="#111827"/>
+  <rect x="154" y="166" width="322" height="150" rx="20" fill="#064e3b"/>
+  <path d="M315 192l-42 96h54l-22 74 80-118h-58l32-52z" fill="#86efac"/>
+  <path d="M576 172h190c40 0 72 32 72 72v244H576z" fill="#d1fae5"/>
+  <path d="M626 264h150M626 326h116M626 388h152" stroke="#0f766e" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="704" cy="468" r="38" fill="#10b981"/>
+  <text x="124" y="585" fill="#d1fae5" font-family="Inter,Arial,sans-serif" font-size="30" font-weight="800">CCS and Type 2 ready</text>
+</svg>

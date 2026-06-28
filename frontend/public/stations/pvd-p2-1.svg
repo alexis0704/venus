@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Le Loi Type 2 Bay">
+  <rect width="960" height="620" fill="#ecfeff"/>
+  <path d="M0 410h960v210H0z" fill="#1f2937"/>
+  <path d="M110 150h290v260H110z" fill="#cffafe"/><path d="M448 100h300v310H448z" fill="#f8fafc"/><path d="M498 160h198v250H498z" fill="#94a3b8"/>
+  <path d="M250 454h300c36 0 67 23 78 56H172c11-33 42-56 78-56z" fill="#155e75"/><circle cx="278" cy="522" r="32" fill="#020617"/><circle cx="548" cy="522" r="32" fill="#020617"/>
+  <rect x="720" y="314" width="86" height="158" rx="18" fill="#0891b2"/><circle cx="763" cy="372" r="24" fill="#cffafe"/>
+  <text x="56" y="84" fill="#0f172a" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Le Loi Type 2 Bay</text>
+</svg>

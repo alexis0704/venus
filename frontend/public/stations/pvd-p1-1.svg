@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" role="img" aria-label="Nguyen Hue Home Charger">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0f172a"/><stop offset=".58" stop-color="#0f766e"/><stop offset="1" stop-color="#86efac"/></linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#111827"/><stop offset="1" stop-color="#334155"/></linearGradient>
+  </defs>
+  <rect width="960" height="620" fill="url(#sky)"/>
+  <circle cx="760" cy="110" r="74" fill="#dcfce7" opacity=".55"/>
+  <path d="M0 360h960v260H0z" fill="url(#road)"/>
+  <path d="M70 355h310V180H70z" fill="#e2e8f0"/><path d="M110 355h230V230H110z" fill="#94a3b8"/><path d="M390 355h240V135H390z" fill="#f8fafc"/><path d="M435 355h150V205H435z" fill="#64748b"/>
+  <path d="M650 350h92c30 0 54 24 54 54v72H596v-72c0-30 24-54 54-54z" fill="#ecfdf5"/><path d="M655 402h80" stroke="#0f766e" stroke-width="18" stroke-linecap="round"/>
+  <path d="M260 452h250c40 0 74 26 86 62H174c12-36 46-62 86-62z" fill="#0f172a"/><path d="M256 434h220l76 62H182z" fill="#22c55e"/><circle cx="270" cy="526" r="34" fill="#020617"/><circle cx="506" cy="526" r="34" fill="#020617"/>
+  <path d="M710 455v-106" stroke="#dcfce7" stroke-width="16" stroke-linecap="round"/><path d="M710 349c34 10 58 40 58 76" fill="none" stroke="#86efac" stroke-width="10" stroke-linecap="round"/>
+  <text x="52" y="92" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="42" font-weight="800">Nguyen Hue Home Charger</text>
+  <text x="54" y="136" fill="#dcfce7" font-family="Inter,Arial,sans-serif" font-size="24" font-weight="600">District 1 private EV charging spot</text>
+</svg>
