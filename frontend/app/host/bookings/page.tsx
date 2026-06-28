@@ -27,14 +27,6 @@ export default function BookingsPage() {
     });
   }, []);
 
-  function updateSelectedState(state: string) {
-    if (!selected) return;
-    const updated = { ...selected, state };
-    setSlots((current) => current.map((slot) => (slot.id === selected.id ? updated : slot)));
-    setSelected(updated);
-    setNotice(`${selected.title} marked as ${state.toLowerCase()}.`);
-  }
-
   function saveBlockTime() {
     const now = new Date();
     const startTime = new Date(now);
@@ -189,22 +181,28 @@ export default function BookingsPage() {
           <div className="hidden xl:block">
             {selected ? (
               <div className="sticky top-24">
-                <BookingPanel booking={selected} onClose={() => setSelected(null)} onAction={updateSelectedState} />
+                <BookingPanel booking={selected} onClose={() => setSelected(null)} />
               </div>
             ) : (
-              <ProviderCard className="sticky top-24">
+              <div
+                className="sticky top-24 min-w-0 rounded-[28px] p-5 shadow-2xl"
+                style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", backdropFilter: "blur(14px)" }}
+              >
                 <p className="text-sm font-semibold" style={{ color: "#e2e8f0" }}>Booking Details</p>
                 <h2 className="mt-2 text-xl font-bold" style={{ color: "var(--text)" }}>Select a time slot</h2>
                 <p className="mt-2 text-sm leading-6" style={{ color: "var(--text-muted)" }}>Click any booked, charging, or blocked slot to manage the reservation.</p>
-              </ProviderCard>
+              </div>
             )}
           </div>
         </div>
 
         {/* Mobile drawer */}
         {selected && (
-          <div className="fixed inset-x-0 bottom-[84px] z-40 px-3 xl:hidden">
-            <BookingPanel booking={selected} compact onClose={() => setSelected(null)} onAction={updateSelectedState} />
+          <div
+            className="fixed inset-0 z-[60] flex items-end p-3 backdrop-blur-sm xl:hidden"
+            style={{ background: "color-mix(in srgb, #000 40%, transparent)" }}
+          >
+            <BookingPanel booking={selected} compact onClose={() => setSelected(null)} />
           </div>
         )}
 
@@ -261,34 +259,39 @@ export default function BookingsPage() {
 }
 
 function BookingPanel({
-  booking, compact = false, onClose, onAction,
+  booking, compact = false, onClose,
 }: {
   booking: BookingSlot;
   compact?: boolean;
   onClose: () => void;
-  onAction: (state: string) => void;
 }) {
   const disabled = booking.state === "Available" || booking.state === "Blocked";
 
   return (
-    <ProviderCard className={compact ? "max-h-[58dvh] overflow-y-auto rounded-[28px] p-4 shadow-2xl" : "sticky top-24"}>
-      <div className="mx-auto mb-3 h-1.5 w-12 rounded-lg xl:hidden"
+    <div
+      className={compact ? "max-h-[88dvh] w-full overflow-y-auto rounded-[28px] p-5 shadow-2xl" : "min-w-0 rounded-[28px] p-5 shadow-2xl"}
+      style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", backdropFilter: "blur(14px)" }}
+    >
+      <div className="mx-auto mb-4 h-1.5 w-12 rounded-lg xl:hidden"
         style={{ background: "color-mix(in srgb, var(--text-muted) 20%, transparent)" }} />
-      <div className="flex items-start justify-between gap-3">
+      <div className="mb-5 flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-semibold" style={{ color: "#e2e8f0" }}>Booking Details</p>
           <h2 className="mt-1 text-xl font-bold" style={{ color: "var(--text)" }}>{booking.title}</h2>
         </div>
-        <StatusBadge tone={booking.state === "Charging" ? "orange" : booking.state === "Booked" ? "slate" : booking.state === "Completed" ? "gray" : booking.state === "Available" ? "gray" : "gray"}>
-          {booking.state}
-        </StatusBadge>
-        <button type="button" onClick={onClose} className="grid size-8 place-items-center rounded-lg xl:hidden"
-          style={{ background: "color-mix(in srgb, var(--glass-bg) 60%, transparent)" }}>
-          <X size={15} style={{ color: "var(--text-muted)" }} />
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <StatusBadge tone={booking.state === "Charging" ? "orange" : booking.state === "Booked" ? "slate" : booking.state === "Completed" ? "gray" : booking.state === "Available" ? "gray" : "gray"}>
+            {booking.state}
+          </StatusBadge>
+          <button type="button" onClick={onClose}
+            className="grid size-9 place-items-center rounded-lg transition-opacity hover:opacity-80"
+            style={{ background: "color-mix(in srgb, var(--glass-bg) 60%, transparent)" }}>
+            <X size={17} style={{ color: "var(--text-muted)" }} />
+          </button>
+        </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-2 text-sm sm:gap-3">
+      <div className="grid grid-cols-2 gap-2 text-sm sm:gap-3">
         <DetailBox icon={UserRound} label="Driver" value={disabled ? "No driver" : booking.title} />
         <DetailBox icon={Car} label="Vehicle" value={booking.vehicle || "None"} />
         <DetailBox icon={BarChart3} label="Plate" value={booking.plate || "-"} />
@@ -296,22 +299,7 @@ function BookingPanel({
         <DetailBox icon={Clock} label="Duration" value={`${booking.time} - ${booking.end}`} />
         <DetailBox icon={CalendarDays} label="Cost" value={booking.cost || "-"} />
       </div>
-
-      <div className="mt-5 grid grid-cols-2 gap-2">
-        <button type="button" onClick={() => onAction("Booked")}
-          className="h-11 rounded-lg text-sm font-bold transition-all duration-200 hover:opacity-90 disabled:opacity-40 active:scale-[0.98]"
-          style={{ background: "#e2e8f0", color: "#0a0f0d" }} disabled={disabled}>Accept</button>
-        <button type="button" onClick={() => onAction("Blocked")}
-          className="h-11 rounded-lg text-sm font-bold transition-all duration-200 hover:opacity-80 disabled:opacity-40"
-          style={{ background: "rgba(239,68,68,0.12)", color: "#ef4444" }} disabled={disabled}>Reject</button>
-        <button type="button" onClick={() => onAction("Charging")}
-          className="h-11 rounded-lg text-sm font-bold transition-all duration-200 hover:opacity-80 disabled:opacity-40"
-          style={{ background: "rgba(251,146,60,0.12)", color: "#fb923c" }} disabled={disabled}>Mark Charging</button>
-        <button type="button" onClick={() => onAction("Completed")}
-          className="h-11 rounded-lg text-sm font-bold transition-all duration-200 hover:opacity-90 disabled:opacity-40 active:scale-[0.98]"
-          style={{ background: "#e2e8f0", color: "#0a0f0d" }} disabled={disabled}>Completed</button>
-      </div>
-    </ProviderCard>
+    </div>
   );
 }
 
